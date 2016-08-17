@@ -1,0 +1,22 @@
+cmudict-en-us.dict
+en-us-ptm/README
+en-us-ptm/feat.params
+en-us-ptm/mdef
+en-us-ptm/means
+en-us-ptm/noisedict
+en-us-ptm/sendump
+en-us-ptm/transition_matrices
+en-us-ptm/variances
+fr (copy).dict
+fr-ptm/README
+fr-ptm/feat.params
+fr-ptm/mdef
+fr-ptm/means
+fr-ptm/mixture_weights
+fr-ptm/noisedict
+fr-ptm/sendump
+fr-ptm/transition_matrices
+fr-ptm/variances
+fr-small.lm.bin
+fr.dict
+keyphrases.txt

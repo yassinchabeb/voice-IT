@@ -16,7 +16,7 @@
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".activity.PocketSphinxActivity"
+            android:name=".activity.WakeUpWordActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

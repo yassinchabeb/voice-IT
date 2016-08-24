@@ -15,7 +15,7 @@
 
     <TextView
             android:id="@+id/spokenText"
-            android:text="Waiting for text to be recognized..."
+            android:hint="Waiting for wake up word..."
             android:textSize="30sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

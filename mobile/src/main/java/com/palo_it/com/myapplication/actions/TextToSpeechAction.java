@@ -36,6 +36,8 @@ public class TextToSpeechAction implements TextToSpeech.OnInitListener {
     }
 
     public void shutdown() {
-        textToSpeech.shutdown();
+        if (textToSpeech != null) {
+            textToSpeech.shutdown();
+        }
     }
 }

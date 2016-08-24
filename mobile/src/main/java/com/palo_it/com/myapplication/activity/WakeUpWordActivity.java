@@ -38,9 +38,11 @@ import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.palo_it.com.myapplication.R;
@@ -52,13 +54,12 @@ import java.util.HashMap;
 
 import static android.widget.Toast.makeText;
 
-public class PocketSphinxActivity extends Activity implements
-        RecognitionListener {
+public class WakeUpWordActivity extends Activity implements RecognitionListener {
 
     /* Named searches allow to quickly reconfigure the decoder */
     private static final String KWS_SEARCH = "wakeup";
     /* Keyword we are looking for to activate menu */
-    private static final String KEYPHRASE = "ok sumo";
+    private static final String KEYPHRASE = "oh joli robot";
 
     /* Used to handle permission request */
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
@@ -74,7 +75,7 @@ public class PocketSphinxActivity extends Activity implements
         captions = new HashMap<>();
         captions.put(KWS_SEARCH, R.string.kws_caption);
         setContentView(R.layout.main);
-        ((TextView) findViewById(R.id.caption_text)).setText("Preparing the recognizer");
+        ((TextView) findViewById(R.id.caption_text)).setText(R.string.preparing_recognizer);
 
         // Check if user has given permission to record audio
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
@@ -83,6 +84,13 @@ public class PocketSphinxActivity extends Activity implements
             return;
         }
         runRecognizerSetup();
+        FloatingActionButton speakButton = (FloatingActionButton) findViewById(R.id.fab);
+        speakButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                jumpToSpeechRecognizer();
+            }
+        });
     }
 
     private void runRecognizerSetup() {
@@ -92,7 +100,7 @@ public class PocketSphinxActivity extends Activity implements
             @Override
             protected Exception doInBackground(Void... params) {
                 try {
-                    Assets assets = new Assets(PocketSphinxActivity.this);
+                    Assets assets = new Assets(WakeUpWordActivity.this);
                     File assetDir = assets.syncAssets();
                     setupRecognizer(assetDir);
                 } catch (IOException e) {
@@ -104,8 +112,7 @@ public class PocketSphinxActivity extends Activity implements
             @Override
             protected void onPostExecute(Exception result) {
                 if (result != null) {
-                    ((TextView) findViewById(R.id.caption_text))
-                            .setText("Failed to init recognizer " + result);
+                    ((TextView) findViewById(R.id.caption_text)).setText("Failed to init recognizer " + result);
                 } else {
                     switchSearch(KWS_SEARCH);
                 }
@@ -130,7 +137,6 @@ public class PocketSphinxActivity extends Activity implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         if (recognizer != null) {
             recognizer.cancel();
             recognizer.shutdown();
@@ -148,20 +154,28 @@ public class PocketSphinxActivity extends Activity implements
             return;
 
         String text = hypothesis.getHypstr();
-        Log.d("PcketSphinxSpeech", "Said: " + text);
-        switch (text) {
-            case KEYPHRASE:
-                recognizer.shutdown();
-                ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
-                toneG.startTone(ToneGenerator.TONE_CDMA_INTERCEPT, 200);
-                toneG.release();
+        Log.d("PocketSphinxSpeech", "WakeUpWord: " + text);
+//        switch (text) {
+//            case KEYPHRASE:
+                jumpToSpeechRecognizer();
+//                break;
+//            default:
+//                ((TextView) findViewById(R.id.result_text)).setText(text);
+//                break;
+//        }
+    }
 
-                Intent intent = new Intent(this.getApplicationContext(), StartSpeechActivity.class);
-                startActivity(intent);
-                break;
-            default:
-                ((TextView) findViewById(R.id.result_text)).setText(text);
-                break;
+    private void jumpToSpeechRecognizer() {
+        if (recognizer != null) {
+            recognizer.shutdown();
+            ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
+            toneG.startTone(ToneGenerator.TONE_CDMA_CONFIRM, 200);
+            toneG.release();
+
+            Intent intent = new Intent(this.getApplicationContext(), StartSpeechActivity.class);
+            startActivity(intent);
+        } else {
+            recreate();
         }
     }
 
@@ -195,9 +209,11 @@ public class PocketSphinxActivity extends Activity implements
         Log.d("StanfordSpeech", "Works!: !!" + searchName);
 //         If we are not spotting, start listening with timeout (10000 ms or 10 seconds).
         if (searchName.equals(KWS_SEARCH)) {
-            recognizer.startListening(searchName);
-        } else
-            recognizer.startListening(searchName);
+            ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
+            toneG.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT, 200);
+            toneG.release();
+        }
+        recognizer.startListening(searchName);
 
         String caption = getResources().getString(captions.get(searchName));
         ((TextView) findViewById(R.id.caption_text)).setText(caption);
@@ -207,19 +223,19 @@ public class PocketSphinxActivity extends Activity implements
         // The recognizer can be configured to perform multiple searches
         // of different kind and switch between them
         recognizer = SpeechRecognizerSetup.defaultSetup()
-                .setAcousticModel(new File(assetsDir, "en-us-ptm"))
-                .setDictionary(new File(assetsDir, "cmudict-en-us.dict"))
-//                .setAcousticModel(new File(assetsDir, "fr-ptm"))
-//                .setDictionary(new File(assetsDir, "fr.dict"))
+//                .setAcousticModel(new File(assetsDir, "en-us-ptm"))
+//                .setDictionary(new File(assetsDir, "cmudict-en-us.dict"))
+                .setAcousticModel(new File(assetsDir, "fr-ptm"))
+                .setDictionary(new File(assetsDir, "fr.dict"))
                 .setRawLogDir(assetsDir) // To disable logging of raw audio comment out this call (takes a lot of space on the device)
-                .setKeywordThreshold(1e-20f) // Threshold to tune for keyphrase to balance between false alarms and misses
+                .setKeywordThreshold(1e-45f) // Threshold to tune for keyphrase to balance between false alarms and misses
                 .setBoolean("-allphone_ci", true)  // Use context-independent phonetic search, context-dependent is too slow for mobile
                 .getRecognizer();
         recognizer.addListener(this);
 
         // Create keyword-activation search.
-        recognizer.addKeyphraseSearch(KWS_SEARCH, KEYPHRASE);
-//        recognizer.addKeywordSearch(KWS_SEARCH, new File(assetsDir, "keyphrases.txt"));
+//        recognizer.addKeyphraseSearch(KWS_SEARCH, KEYPHRASE);
+        recognizer.addKeywordSearch(KWS_SEARCH, new File(assetsDir, "keyphrases.list"));
     }
 
     @Override

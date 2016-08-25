@@ -4,9 +4,9 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
@@ -31,10 +31,11 @@ import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_MEDIARECORDEVENT_PICTU
 import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
 import com.parrot.arsdk.arcontroller.ARControllerCodec;
 import com.parrot.arsdk.arcontroller.ARFrame;
-import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.EnumUtils;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class StartSpeechActivity extends AppCompatActivity {
 
@@ -46,10 +47,12 @@ public class StartSpeechActivity extends AppCompatActivity {
     private SpeechRecognizer speechRecognizer;
     private JSDrone mJSDrone;
     private ProgressDialog progressDialog;
+    private AtomicBoolean recreating = new AtomicBoolean(false);
 
-    private Handler droneActionsHandler;
+    //    private Handler droneActionsHandler;
     private ParrotController parrotController;
     private TextInterpreter textInterpreter;
+    private AsyncTask<String, Void, Void> runDroneTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,34 +62,30 @@ public class StartSpeechActivity extends AppCompatActivity {
         } catch (IOException e) {
             Log.e(TAG, "Error opening ontology file", e);
         }
-        droneActionsHandler = new Handler(Looper.getMainLooper());
+//        droneActionsHandler = new Handler(Looper.getMainLooper());
         setContentView(R.layout.activity_start_speech);
         parrotController = ParrotController.getInstance();
-        progressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Waiting for drone to come online...");
-        progressDialog.show();
         final Handler handler = new Handler(this.getMainLooper());
         if (mJSDrone == null) {
-            parrotController.initDiscoveryService(this, new Predicate<ARDiscoveryDeviceService>() {
+            progressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Waiting for drone to come online...");
+            progressDialog.show();
+            parrotController.initDiscoveryService(this, new Predicate<JSDrone>() {
                 @Override
-                public boolean apply(ARDiscoveryDeviceService service) {
-                    mJSDrone = new JSDrone(new JSDroneStatusListener() {
+                public boolean apply(JSDrone drone) {
+                    mJSDrone = drone;
+                    checkDroneStatus(drone.getConnectionState());
+                    drone.setAsyncListener(new JSDroneStatusListener() {
                         @Override
                         public void asyncReceiver(Runnable task) {
                             handler.post(task);
                         }
-                    }, service);
-                    mJSDrone.addListener(new JSDroneListener() {
+                    });
+                    drone.addListener(new JSDroneListener() {
                         @Override
                         public void onDroneConnectionChanged(ARCONTROLLER_DEVICE_STATE_ENUM state) {
-                            if (state.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING)) {
-                                progressDialog.setMessage("Drone online!");
-                                View viewById = findViewById(R.id.jumpBt);
-                                viewById.setVisibility(View.VISIBLE);
-                                progressDialog.dismiss();
-//                                setupActions();
-                            }
+                            checkDroneStatus(state);
                         }
 
                         @Override
@@ -167,9 +166,20 @@ public class StartSpeechActivity extends AppCompatActivity {
                 }
             }
         } else {
-            doConnectDrone();
+//            doConnectDrone();
+            setupActions();
         }
-        setupActions();
+//        setupActions();
+    }
+
+    private void checkDroneStatus(ARCONTROLLER_DEVICE_STATE_ENUM state) {
+        if (state.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING)) {
+            progressDialog.setMessage("Drone online!");
+            View viewById = findViewById(R.id.jumpBt);
+            viewById.setVisibility(View.VISIBLE);
+            progressDialog.dismiss();
+            setupActions();
+        }
     }
 
     private void doConnectDrone() {
@@ -190,19 +200,22 @@ public class StartSpeechActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         progressDialog.dismiss();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (mJSDrone != null) {
-//                    progressDialog.setMessage("Disconnecting ...");
-//                    progressDialog.show();
-                    if (mJSDrone.disconnect()) {
-//                        progressDialog.dismiss();
-                        parrotController.closeServices();
-                    }
-                }
-            }
-        }).start();
+        if (!recreating.get()) {
+//            new AsyncTask() {
+//                @Override
+//                protected Object doInBackground(Object[] params) {
+//                    if (mJSDrone != null) {
+////                    progressDialog.setMessage("Disconnecting ...");
+////                    progressDialog.show();
+//                        if (mJSDrone.disconnect()) {
+////                        progressDialog.dismiss();
+//                            parrotController.closeServices();
+//                        }
+//                    }
+//                    return null;
+//                }
+//            }.execute();
+        }
         if (tts != null) {
             tts.shutdown();
         }
@@ -211,8 +224,8 @@ public class StartSpeechActivity extends AppCompatActivity {
             speechRecognizer.cancel();
             speechRecognizer.destroy();
         }
-        Intent intent = new Intent(this, WakeUpWordActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, WakeUpWordActivity.class);
+//        startActivity(intent);
     }
 
     private void setupActions() {
@@ -222,50 +235,58 @@ public class StartSpeechActivity extends AppCompatActivity {
         startActivityForResult(checkTTSIntent, DATA_CHECK_CODE);
         speechRecognizer = SpeechToTextAction.createRecognizer(this, new SpeechActionListener() {
             @Override
-            public void partialResult(final String partialText) {
+            public boolean partialResult(final String partialText) {
                 mText.setText(partialText);
-                droneActionsHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        String matchedText = textInterpreter.phoneticSearch(partialText);
-                        if (matchedText != null) {
-                            speechRecognizer.stopListening();
-                        }
-                        say(partialText);
-                        if (!partialText.equalsIgnoreCase(matchedText)) {
-                            say("deviens " + matchedText);
-                        }
-                        if (mJSDrone != null) {
-//                            Pattern pattern = Pattern.compile(".*(tourn|avance|recoul.*)");
-//                            Matcher matcher = pattern.matcher(partialText);
-//                            if (matcher.find()) {
-//                                String matchedText = matcher.group(1);
-                            if (matchedText != null) {
-//                                    if (matchedText.contains("tourn") &&
-//                                            StringUtils.getLevenshteinDistance(matchedText, "tourne") <= 3) {
-                                if (isTextCloseEnough(matchedText, "tourne")) {
-                                    speechRecognizer.cancel();
+                final String matchedText = textInterpreter.matchText(partialText);
+                if (matchedText != null) {
+                    Log.d(TAG, "Running Action: " + matchedText);
+                    say(matchedText);
+                    runDroneTask = new AsyncTask<String, Void, Void>() {
+                        private long startTime;
 
-                                } else if (matchedText.contains("avance")) {
-                                    speechRecognizer.cancel();
-                                    mJSDrone.doSomething(JSDrone.ACTIONS.GO_FORWARD);
-                                } else if (matchedText.contains("recoul")) {
-                                    speechRecognizer.cancel();
-                                    mJSDrone.doSomething(JSDrone.ACTIONS.GO_BACKWARDS);
+                        @Override
+                        protected void onPreExecute() {
+                            Log.d(TAG, "Starting execute robot command... ");
+                            startTime = System.currentTimeMillis();
+                        }
+
+                        @Override
+                        protected Void doInBackground(String... params) {
+                            if (mJSDrone != null) {
+                                for (String text : params) {
+                                    mJSDrone.doSomething(EnumUtils.getEnum(JSDrone.ACTIONS.class, text.toUpperCase()));
                                 }
                             }
-//                            }
+                            Log.d(TAG, "robot command executed in:  " + (System.currentTimeMillis() - startTime) + " ms");
+                            return null;
                         }
-
-                    }
-                });
+                    }.execute(matchedText);
+//                    droneActionsHandler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                        }
+//                    });
+                    return true;
+                }
+                return false;
             }
 
             @Override
             public void finalResult(String finalText) {
-                finish();
+                try {
+                    Thread.sleep(2000);
+                    recreating.set(true);
+                    if (runDroneTask != null && !runDroneTask.getStatus().equals(AsyncTask.Status.FINISHED)) {
+                        runDroneTask.get();
+                    }
+                    recreate();
+                    recreating.set(false);
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
-        });
+        }, "ok robot");
     }
 
     private void say(String partialText) {
@@ -274,10 +295,6 @@ public class StartSpeechActivity extends AppCompatActivity {
                 Log.d(TAG, "Can't speak!");
             }
         }
-    }
-
-    private boolean isTextCloseEnough(String matchedText, String targetText) {
-        return StringUtils.getLevenshteinDistance(matchedText, targetText) <= 3;
     }
 
     @Override

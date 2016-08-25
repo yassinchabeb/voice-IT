@@ -7,10 +7,15 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import com.palo_it.com.myapplication.R;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.palo_it.com.myapplication.activity.StartSpeechActivity.TAG;
@@ -19,19 +24,29 @@ public class SpeechToTextAction {
 
     private static ProgressDialog loadingRecognizer;
 
-    public static SpeechRecognizer createRecognizer(Context context, SpeechActionListener resultHandler) {
-        SpeechRecognizer speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
-        loadingRecognizer = new ProgressDialog(context, R.style.AppCompatAlertDialogStyle);
+    private static String wakeUpPhraseText;
+    private static boolean isAwake = true;
+    private static SpeechRecognizer speechRecognizer;
+    private static Intent intent;
+    private static TextView textView;
+
+    public static SpeechRecognizer createRecognizer(AppCompatActivity activity, SpeechActionListener resultHandler, String wakeUpPhrase) {
+        speechRecognizer =
+                SpeechRecognizer.createSpeechRecognizer(activity);
+        loadingRecognizer = new ProgressDialog(activity, R.style.AppCompatAlertDialogStyle);
         loadingRecognizer.setIndeterminate(true);
         loadingRecognizer.setMessage("Starting up Voice Listener...");
         loadingRecognizer.show();
         speechRecognizer.setRecognitionListener(new SpeechListener(resultHandler));
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        wakeUpPhraseText = wakeUpPhrase;
+        textView = (TextView) activity.findViewById(R.id.spokenText);
+        intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.getPackageName());
+        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, activity.getPackageName());
         intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-//                intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
-        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 1000);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "fr-FR");
+        intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
+        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 10000);
 //        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 500);
 //        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 2500);
 //            intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
@@ -52,9 +67,12 @@ public class SpeechToTextAction {
             loadingRecognizer.dismiss();
         }
 
+        AtomicLong timeDebug = new AtomicLong();
+
         @Override
         public void onBeginningOfSpeech() {
             Log.d(TAG, "onBeginningOfSpeech");
+            timeDebug.set(System.currentTimeMillis());
         }
 
         @Override
@@ -77,17 +95,31 @@ public class SpeechToTextAction {
             String text = "error" + error;
             switch (error) {
                 case SpeechRecognizer.ERROR_NO_MATCH:
-                    text = "Didn't understand...";
+                    text = "Je n'ai pas compris";
                     break;
                 case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
-                    text = "You didn't speak, right...?";
+                    if (isAwake) {
+                        text = "Essayez encore s'il vous plaît...";
+                    }
+                    break;
+                case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
+
+            }
+            try {
+                speechRecognizer.stopListening();
+                Thread.sleep(2000);
+                speechRecognizer.startListening(intent);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             Log.d(TAG, text);
+            textView.setText(text);
         }
 
         @Override
         public void onResults(Bundle results) {
             String str = "";
+            partialResult.lazySet("");
             Log.d(TAG, "onResults " + results);
             ArrayList data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
             for (int i = 0; i < data.size(); i++) {
@@ -103,24 +135,37 @@ public class SpeechToTextAction {
         public void onPartialResults(Bundle partialResults) {
             ArrayList data = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
             if (!data.isEmpty()) {
+                long now = System.currentTimeMillis();
+                Log.d(TAG, "Time from beginningOfSpeech to voice recognition: " + (now - timeDebug.getAndSet(now)) + " ms");
                 String partialText = data.get(data.size() - 1).toString();
                 if (!partialText.isEmpty()) {
-                    String existing = partialResult.get();
-                    if (!existing.isEmpty() && !existing.equals(partialText) && existing.contains(partialText)) {
-                        String textDiff = existing.substring(existing.lastIndexOf(partialText));
-                        if (!textDiff.isEmpty()) {
-                            //Added some text!
-                            partialResult.set(partialText);
-                            textHandler.partialResult(partialResult.get());
+                    Log.d(TAG, String.format("onPartialResults: %s", partialText));
+                    if (isAwake) {
+                        String onlyActions = StringUtils.remove(partialText, wakeUpPhraseText);
+                        if (!onlyActions.isEmpty()) {
+                            findActions(partialText);
                         }
-                    } else if (existing.isEmpty()){
-                        //Added some text!
-                        partialResult.set(partialText);
-                        textHandler.partialResult(partialResult.get());
+                    } else {
+                        if (StringUtils.getLevenshteinDistance(partialText, wakeUpPhraseText) < 4) {
+                            isAwake = true;
+                            speechRecognizer.stopListening();
+                            intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 10000);
+                            speechRecognizer.startListening(intent);
+                        }
                     }
                 }
-                Log.d(TAG, String.format("onPartialResults: %s", partialText));
             }
+        }
+
+        private void findActions(String partialText) {
+            String existing = partialResult.get();
+            String onlyActions = StringUtils.remove(partialText, existing);
+            if (!onlyActions.isEmpty()) {
+                if (textHandler.partialResult(onlyActions)) {
+                    speechRecognizer.stopListening();
+                }
+            }
+            partialResult.set(partialText);
         }
 
         public void onEvent(int eventType, Bundle params) {

@@ -5,7 +5,7 @@ android {
     buildToolsVersion "24.0.1"
     defaultConfig {
         applicationId "com.palo_it.com.voiceit"
-        minSdkVersion 22
+        minSdkVersion 23
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"

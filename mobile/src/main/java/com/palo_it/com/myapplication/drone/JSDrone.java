@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_ENUM;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM;
+import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM;
 import com.parrot.arsdk.arcontroller.*;
 import com.parrot.arsdk.ardiscovery.*;
@@ -19,9 +20,13 @@ public class JSDrone {
     private static final String TAG = "JSDrone";
 
     private static final int DEVICE_PORT = 21;
-    private final JSDroneStatusListener asyncListener;
+    private JSDroneStatusListener asyncListener;
 
     private int audioStreamBitField;
+
+    public void setAsyncListener(JSDroneStatusListener asyncListener) {
+        this.asyncListener = asyncListener;
+    }
 
     public enum JumpingStyle {
         HIGH, LONG, MAX
@@ -35,10 +40,9 @@ public class JSDrone {
     private String mCurrentRunId;
     private ARDISCOVERY_PRODUCT_ENUM mProductType;
 
-    public JSDrone(JSDroneStatusListener asyncListener, @NonNull ARDiscoveryDeviceService deviceService) {
+    public JSDrone(@NonNull ARDiscoveryDeviceService deviceService) {
         mJSDroneListeners = new ArrayList<>();
         mState = ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_STOPPED;
-        this.asyncListener = asyncListener;
         // if the product type of the deviceService match with the types supported
         mProductType = ARDiscoveryService.getProductFromProductID(deviceService.getProductID());
         ARDISCOVERY_PRODUCT_FAMILY_ENUM family = ARDiscoveryService.getProductFamily(mProductType);
@@ -529,27 +533,37 @@ public class JSDrone {
     };
 
     public enum ACTIONS {
-        TURN_LEFT, TURN_RIGHT, GO_FORWARD, GO_BACKWARDS, SHAKE_IT
+        FORWARD, BACKWARD, LEFT, RIGHT, STOP, ANIMATIONSLONGJUMP, POSTUREKICKER
     }
 
     public void doSomething(ACTIONS action) {
-        switch (action) {
-            case TURN_LEFT:
-                doSomething((byte) -20);
-                break;
-            case TURN_RIGHT:
-                doSomething((byte) 20);
-                break;
-            case GO_FORWARD:
-                doMove((byte) 50);
-                break;
-            case GO_BACKWARDS:
-                doMove((byte) -50);
-                break;
+        if (action != null) {
+            switch (action) {
+                case LEFT:
+                    doTurn((byte) -20);
+                    break;
+                case RIGHT:
+                    doTurn((byte) 20);
+                    break;
+                case FORWARD:
+                    doMove((byte) 50);
+                    break;
+                case BACKWARD:
+                    doMove((byte) -50);
+                    break;
+                case STOP:
+                    mDeviceController.getFeatureCommon().sendAnimationsStopAllAnimations();
+                    break;
+                case ANIMATIONSLONGJUMP:
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsJump(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_LONG);
+                    break;
+                default:
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_TAP);
+            }
         }
     }
 
-    private void doSomething(byte turn) {
+    private void doTurn(byte turn) {
         try {
             setTurn(turn);
             setFlag((byte) 1);

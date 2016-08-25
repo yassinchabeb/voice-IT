@@ -2,6 +2,7 @@ package com.palo_it.com.myapplication;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
+import com.palo_it.com.myapplication.drone.JSDrone;
 import com.palo_it.com.myapplication.text.SemanticParserMatcher;
 import org.junit.Test;
 
@@ -18,6 +19,10 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     @Test
     public void testSemanticStuff() throws IOException {
         SemanticParserMatcher matcher = new SemanticParserMatcher(getContext().getAssets().open("sumonto.owl"));
-        matcher.getApi("arrête");
+        assertEquals(JSDrone.ACTIONS.STOP, JSDrone.ACTIONS.valueOf(matcher.getApi("arrête").toUpperCase()));
+        assertEquals(JSDrone.ACTIONS.FORWARD, JSDrone.ACTIONS.valueOf(matcher.getApi("avance").toUpperCase()));
+        assertEquals(JSDrone.ACTIONS.RIGHT, JSDrone.ACTIONS.valueOf(matcher.getApi("tourne").toUpperCase()));
+        assertEquals(JSDrone.ACTIONS.LEFT, JSDrone.ACTIONS.valueOf(matcher.getApi("tourne à gauche").toUpperCase()));
+        assertEquals(JSDrone.ACTIONS.BACKWARD, JSDrone.ACTIONS.valueOf(matcher.getApi("recul").toUpperCase()));
     }
 }

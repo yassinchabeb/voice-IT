@@ -1,11 +1,14 @@
 package com.palo_it.com.myapplication.parrot;
 
 import android.content.*;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import com.android.internal.util.Predicate;
+import com.palo_it.com.myapplication.drone.JSDrone;
+import com.palo_it.com.myapplication.drone.JSDroneStatusListener;
 import com.parrot.arsdk.ARSDK;
 import com.parrot.arsdk.ardiscovery.ARDISCOVERY_PRODUCT_ENUM;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
@@ -32,15 +35,20 @@ public class ParrotController implements ARDiscoveryServicesDevicesListUpdatedRe
     private static final ParrotController INSTANCE = new ParrotController();
     private AppCompatActivity context;
     private ARDiscoveryServicesDevicesListUpdatedReceiver receiver;
-    private Predicate<ARDiscoveryDeviceService> serviceReadyListener;
+    private Predicate<JSDrone> droneListener;
+    private JSDrone jsDrone;
 
     public static ParrotController getInstance() {
         return INSTANCE;
     }
 
-    public void initDiscoveryService(AppCompatActivity context, Predicate<ARDiscoveryDeviceService> serviceReadyListener) {
+    public void initDiscoveryService(AppCompatActivity context, Predicate<JSDrone> droneListener) {
         this.context = context;
-        this.serviceReadyListener = serviceReadyListener;
+        this.droneListener = droneListener;
+        if (jsDrone != null) {
+            droneListener.apply(jsDrone);
+            return;
+        }
         // create the service connection
         if (mArdiscoveryServiceConnection == null) {
             mArdiscoveryServiceConnection = new ServiceConnection() {
@@ -96,7 +104,8 @@ public class ParrotController implements ARDiscoveryServicesDevicesListUpdatedRe
             for (ARDiscoveryDeviceService service : deviceList) {
                 ARDISCOVERY_PRODUCT_ENUM productID = ARDiscoveryService.getProductFromProductID(service.getProductID());
                 if (productID == ARDISCOVERY_PRODUCT_ENUM.ARDISCOVERY_PRODUCT_JS) {
-                    serviceReadyListener.apply(service);
+                    jsDrone = new JSDrone(service);
+                    droneListener.apply(jsDrone);
                 }
             }
         }
@@ -110,15 +119,17 @@ public class ParrotController implements ARDiscoveryServicesDevicesListUpdatedRe
     public void closeServices() {
         Log.d(TAG, "closeServices ...");
         if (mArdiscoveryService != null) {
-            new Thread(new Runnable() {
+            new AsyncTask() {
                 @Override
-                public void run() {
+                protected Object doInBackground(Object[] params) {
                     mArdiscoveryService.stop();
                     context.getApplicationContext().unbindService(mArdiscoveryServiceConnection);
                     unregisterReceivers();
                     mArdiscoveryService = null;
+                    jsDrone = null;
+                    return null;
                 }
-            }).start();
+            }.execute();
         }
     }
 

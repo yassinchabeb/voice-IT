@@ -108,8 +108,8 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#animationsHighJump">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="en">jump very high;jump up there;jump higher;jump the highest possible;make a high jump</command>
         <command xml:lang="fr">saute très haut;sautez très haut;saute là-haut;sautez là-haut;saute plus haut;sautez plus haut;saute le plus haut possible;sautez le plus haut possible;fait un saut en hauteur;faites un saut en hauteur</command>
+        <command xml:lang="en">jump very high;jump up there;jump higher;jump the highest possible;make a high jump</command>
         <posture>jumper</posture>
     </owl:Class>
     
@@ -119,8 +119,8 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#animationsLongJump">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="en">jump;jump very long;jump there;jump longer;jump the longest possible;make a long jump</command>
         <command xml:lang="fr">saut long;long saut;saute très long;sautez très long;saute là-bas;saute ici;sautez là-bas;sautez ici;saute plus long;sautez plus long;saute le plus long possible;sautez le plus long possible;fait un saut en longueur;faites un saut en longueur;saute devant;sautez devant;saute en avant;sautez en avant;</command>
+        <command xml:lang="en">jump;jump very long;jump there;jump longer;jump the longest possible;make a long jump</command>
         <posture>jumper;kicker</posture>
     </owl:Class>
     
@@ -160,7 +160,7 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#animationsSlowShake">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="fr">secousse;secoue toi;secouez vous;animation secousse</command>
+        <command xml:lang="fr">secousse;secoue-toi;secouez-vous;animation secousse</command>
         <command xml:lang="en">slow shake animation;slow shake;shake it,shake</command>
     </owl:Class>
     
@@ -170,7 +170,7 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#animationsSpin">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="fr">rotation;tourne;tourne toi;tournez;tournez vous;retourne;retourne toi;retournez vous;animation rotation</command>
+        <command xml:lang="fr">rotation;tourne;tourne-toi;tournez;tournez-vous;retourne;retourne-toi;retournez-vous;animation rotation</command>
         <command xml:lang="en">spin; spin animation;rotation;turn;tun over</command>
     </owl:Class>
     
@@ -180,7 +180,7 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#animationsSpinJump">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="fr">rotation puis saut;tourne puis saute;tourne toi puis saute;tournez puis sautez;tournez vous puis sautez;retourne puis saute;retourne toi puis saute;retournez vous puis sautez;animation rotation puis saut;rotation et saut;tourne et saute;tourne toi et saute;tournez et sautez;tournez vous et sautez;retourne et saute;retourne toi et saute;retournez vous et sautez;animation rotation et saut</command>
+        <command xml:lang="fr">rotation puis saut;tourne puis saute;tourne-toi puis saute;tournez puis sautez;tournez-vous puis sautez;retourne puis saute;retourne-toi puis saute;retournez-vous puis sautez;animation rotation puis saut;rotation et saut;tourne et saute;tourne-toi et saute;tournez et sautez;tournez-vous et sautez;retourne et saute;retourne-toi et saute;retournez-vous et sautez;animation rotation et saut</command>
         <command xml:lang="en">spin then jump;spin then jump animation;rotation then jumping;turn then jump;tun over then jump;spin and jump;spin and jump animation;rotation and jumping;turn and jump;tun over and jump</command>
     </owl:Class>
     
@@ -190,7 +190,7 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#animationsSpinToPosture">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="fr">rotation puis reposition;tourne puis repositionne toi;tourne toi puis repositionne toi;tournez puis repositionnez vous;tournez vous puis repositionnez vous;retourne puis repositionne toi;retourne toi puis repositionne toi;retournez vous puis repositionnez vous;animation rotation puis reposition;rotation et reposition;tourne et repositionne toi;tourne toi et repositionne toi;tournez et repositionnez vous;tournez vous et repositionnez vous;retourne et repositionne toi;retourne toi et repositionne toi;retournez vous et repositionnez vous;animation rotation et reposition</command>
+        <command xml:lang="fr">rotation puis reposition;tourne puis repositionne-toi;tourne-toi puis repositionne-toi;tournez puis repositionnez-vous;tournez-vous puis repositionnez-vous;retourne puis repositionne-toi;retourne-toi puis repositionne-toi;retournez-vous puis repositionnez-vous;animation rotation puis reposition;rotation et reposition;tourne et repositionne-toi;tourne-toi et repositionne-toi;tournez et repositionnez-vous;tournez-vous et repositionnez-vous;retourne et repositionne-toi;retourne-toi et repositionne-toi;retournez-vous et repositionnez-vous;animation rotation et reposition</command>
     </owl:Class>
     
 
@@ -199,7 +199,7 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#animationsSpiral">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="fr">rotation en spiral;tourne en spiral;tourne toi en spiral;tournez en spiral;tournez vous en spiral;animation spiral</command>
+        <command xml:lang="fr">rotation en spiral;tourne en spiral;tourne-toi en spiral;tournez en spiral;tournez-vous en spiral;animation spiral</command>
         <command xml:lang="en">spiral;spiral animation</command>
     </owl:Class>
     
@@ -209,8 +209,8 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#animationsStop">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="fr">stop animation;arrête animation;arrêtez animation;pause animation;pause toi;pausez vous;stop l&apos;animation;arrête l&apos;animation;arrêtez l&apos;animation;pause l&apos;animation</command>
-        <command xml:lang="en">stop animation;pause animation;stop the animation;pause the animation</command>
+        <command xml:lang="fr">stop annimation;arrête annimation;arrêtez annimation;pause annimation;pause-toi;pausez-vous;stop l&apos;annimation;arrête l&apos;annimation;arrêtez l&apos;annimation;pause l&apos;annimation</command>
+        <command xml:lang="en">stop annimation;pause annimation;stop the annimation;pause the annimation</command>
     </owl:Class>
     
 
@@ -235,6 +235,8 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#backward">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
+        <command xml:lang="fr">recul,reculez,va en arrière,marche en arrière,recule un peu,reculez un peu,va en arrière un peu,allez en arrière,allez en arrière un peu,reviens</command>
+        <command xml:lang="en">move back,go behind, walk behind,moves back a little,go behind a little</command>
         <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
     </owl:Class>
     
@@ -442,7 +444,7 @@
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#epostureUnknown">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#event"/>
         <message xml:lang="en">Oops can you help me please? I can not move.</message>
-        <message xml:lang="fr">Oups pourriez-vous m&apos;aider s&apos;il vous plaît ? Je ne peux bouger.</message>
+        <message xml:lang="fr">Oups pourriez-vous m&apos;aider s&apos;il-vous plaît ? Je ne peux bouger.</message>
     </owl:Class>
     
 
@@ -476,6 +478,8 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#forward">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
+        <command xml:lang="fr">avance,avancez,avance un peu,avancez un peu,bouge,bougez,bouge un peu,bougez un peu,marche,marchez,marche un peu,marchez un peu,roule,roulez,roule un peu,roulez un peu</command>
+        <command xml:lang="en">advance,advances a little,move,moves a little,walk,go,walk a little,go a little,roll,roll a little</command>
         <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
     </owl:Class>
     
@@ -485,6 +489,8 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#getVideoStream">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
+        <command xml:lang="en">video,video please,get the video,show the video,display the video</command>
+        <command xml:lang="fr">vidéo,la vidéo,le vidéo s&apos;il-vous plaît,obtien la vidéo,obtenez la vidéo,montre la vidéo,montrez la vidéo,affiche la vidéo,affichez la vidéo</command>
         <event>egetVideoStream</event>
         <returns>stream</returns>
     </owl:Class>
@@ -495,6 +501,8 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#left">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
+        <command xml:lang="fr">tourne à gauche,tournez à gauche,tourner à gauche,pivote à gauche,pivotez à gauche,oriente-toi à gauche,orientez-vous à gauche</command>
+        <command xml:lang="en">turn left,swivel on the left,direct you on the left</command>
         <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
     </owl:Class>
     
@@ -504,6 +512,8 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#postureJumper">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
+        <command xml:lang="en">prepare to jump,position to jump,posture to jump,jumper</command>
+        <command xml:lang="fr">prépare-toi à sauter,préparez-vous à sauter,position pour sauter</command>
         <final>jumper</final>
     </owl:Class>
     
@@ -513,6 +523,8 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#postureKicker">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
+        <command xml:lang="en">prepare to kick,position to kick,posture to kick,kicker</command>
+        <command xml:lang="fr">prépare-toi à frapper,préparez-vous à frapper,position pour frapper</command>
         <final>kicker</final>
     </owl:Class>
     
@@ -522,6 +534,8 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#postureStanding">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
+        <command xml:lang="fr">lève-toi,levez-vous,debout,met-toi prêt,mettez-vous prêt</command>
+        <command xml:lang="en">prepare to stand,position to stand,posture to stand,stand,stand up,</command>
         <final>standing</final>
     </owl:Class>
     
@@ -531,6 +545,8 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#right">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
+        <command xml:lang="fr">tourne à droite,tournez à droite,tourner à droite,pivote à droite,pivotez à droite,oriente-toi à droite,orientez-vous à droite</command>
+        <command xml:lang="en">turn right,swivel on the right,direct you on the right</command>
         <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
     </owl:Class>
     
@@ -549,7 +565,7 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#stop">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="fr">stop;arrête;arrêtez;pause;pause toi;pausez vous</command>
+        <command xml:lang="fr">stop;arrête;arrêtez;pause;pause-toi;pausez-vous</command>
         <command xml:lang="en">stop;stop it;pause;</command>
     </owl:Class>
 </rdf:RDF>

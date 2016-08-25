@@ -14,23 +14,19 @@ import java.io.InputStream;
 
 public class SemanticParserMatcher {
 
+    public static final String UNKNOWN = "UNKNOWN";
     private InputStream ontologyFile;
 
-    DocumentBuilderFactory factory;
-    DocumentBuilder builder;
-    Document document;
-    Element racine;
+    private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    private DocumentBuilder builder;
+    private Document document;
+    private Element racine;
 
     public SemanticParserMatcher(InputStream ontologyFile) {
         this.ontologyFile = ontologyFile;
-        buildFactory();
         builder = getDoumentBuilder();
         document = getDocument();
         racine = getRacine();
-    }
-
-    public void buildFactory() {
-        factory = DocumentBuilderFactory.newInstance();
     }
 
     public DocumentBuilder getDoumentBuilder() {
@@ -54,20 +50,11 @@ public class SemanticParserMatcher {
     }
 
     public Element getRacine() {
-        Element racine;
-        // System.out.println("*************PROLOGUE************");
-        // System.out.println("version : " + document.getXmlVersion());
-        // System.out.println("encodage : " + document.getXmlEncoding());
-        // System.out.println("standalone : " +
-        // document.getXmlStandalone());
-        racine = document.getDocumentElement();
-        // System.out.println("\n*************RACINE************");
-        // System.out.println(racine.getNodeName());
-        return racine;
+        return document.getDocumentElement();
     }
 
     public String getApi(String textFromSpeech) {
-        String apiOperation = "UNKNOWN";
+        String apiOperation = UNKNOWN;
 
         if (racine != null) {
             final NodeList racineNoeuds = racine.getChildNodes();
@@ -77,41 +64,29 @@ public class SemanticParserMatcher {
                 if (racineNoeuds.item(i).getNodeType() == Node.ELEMENT_NODE) {
                     final Element element = (Element) racineNoeuds.item(i);
                     if (element != null) {
-                        if (element.getNodeName() != null
-                                && element.getNodeName().equals("owl:Class")) {
+                        if (element.getNodeName() != null && element.getNodeName().equals("owl:Class")) {
 
-                            System.out.println("getNodeName : "
-                                    + element.getNodeName());
+//                            System.out.println("getNodeName : " + element.getNodeName());
 
                             if (element.getAttribute("rdf:about") != null) {
-                                System.out.println("rdf:about : "
-                                        + element.getAttribute("rdf:about"));
+//                                System.out.println("rdf:about : " + element.getAttribute("rdf:about"));
                             }
-                            final Element subClassOf = (Element) element
-                                    .getElementsByTagName("rdfs:subClassOf")
+                            final Element subClassOf = (Element) element.getElementsByTagName("rdfs:subClassOf")
                                     .item(0);
-
-                            final Element command = (Element) element
-                                    .getElementsByTagName("command").item(0);
-
-                            final Element posture = (Element) element
-                                    .getElementsByTagName("posture").item(0);
+                            final Element command = (Element) element.getElementsByTagName("command").item(0);
+                            final Element posture = (Element) element.getElementsByTagName("posture").item(0);
 
                             if (subClassOf != null
                                     && subClassOf.getAttribute("rdf:resource") != null) {
-                                System.out.println("rdf:resource : "
-                                        + subClassOf
-                                        .getAttribute("rdf:resource"));
+//                                System.out.println("rdf:resource : " + subClassOf.getAttribute("rdf:resource"));
                             }
 
                             if (command != null) {
-                                apiOperation = match(textFromSpeech, element,
-                                        command, apiOperation);
+                                apiOperation = match(textFromSpeech, element, command, apiOperation);
                             }
 
                             if (posture != null) {
-                                System.out.println("posture : "
-                                        + posture.getTextContent());
+//                                System.out.println("posture : " + posture.getTextContent());
                             }
                         }
                     }
@@ -125,17 +100,17 @@ public class SemanticParserMatcher {
     public String match(String textFromSpeech, Element element, Element command, String apiOperation) {
         String apiOperationTmp = apiOperation;
 
-        System.out.println("command : " + command.getTextContent());
+//        System.out.println("command : " + command.getTextContent());
         // String textFromSpeech = "arrête";
         if (command.getTextContent().contains(textFromSpeech)) {
-            System.out.println("call API : #########");
+//            System.out.println("call API : #########");
             if (element.getAttribute("rdf:about") != null) {
                 int index = element.getAttribute("rdf:about").indexOf("#");
                 apiOperationTmp = element.getAttribute("rdf:about").substring(
                         index + 1);
-                System.out.println("rdf:about : " + apiOperationTmp);
+//                System.out.println("rdf:about : " + apiOperationTmp);
             }
-            System.out.println("####################");
+//            System.out.println("####################");
         }
         return apiOperationTmp;
     }

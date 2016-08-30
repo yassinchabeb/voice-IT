@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
-* Test commentar
+* Test commenta
 */
 public class SemanticParserMatcher {
 

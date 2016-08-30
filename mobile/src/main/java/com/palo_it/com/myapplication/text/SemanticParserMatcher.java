@@ -12,6 +12,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+* Test commentary
+*/
 public class SemanticParserMatcher {
 
     public static final String UNKNOWN = "UNKNOWN";

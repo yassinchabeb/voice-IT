@@ -2,13 +2,16 @@ package com.palo_it.com.myapplication.speech.drone.command;
 
 import android.app.Activity;
 import android.util.Log;
+
 import com.palo_it.com.myapplication.speech.text.match.SoundsLikeWordMatcher;
 import com.palo_it.com.myapplication.speech.voiceaction.DroneExecutor;
 import com.palo_it.com.myapplication.speech.voiceaction.VoiceActionCommand;
 import com.palo_it.com.myapplication.text.OntologySearcher;
+
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+
 import root.gast.speech.text.WordList;
 
 import java.io.IOException;
@@ -31,11 +34,11 @@ public class DroneActionLookup implements VoiceActionCommand {
         for (String command : ontology.getCommands()) {
             String[] splitted = command.split(";");
             for (String action : splitted) {
-                action = removeStopWords(action);
+                //action = removeStopWords(action);
 //                WordList wordList = new WordList(action);
 //                String[] allOntoWords = wordList.getWords();
 //                allWords.addAll(Arrays.asList(allOntoWords));
-                allWords.add(action);
+                allWords.add(action.trim());
             }
         }
         this.ontologyMatcher = new SoundsLikeWordMatcher(allWords.toArray(new String[0]));
@@ -64,13 +67,30 @@ public class DroneActionLookup implements VoiceActionCommand {
         String heardWord = heard.getSource();
         List<String> actions = new ArrayList<>();
 //        for (String word : heardWords) {
-        String noStopWords = removeStopWords(heardWord);
-        if (ontologyMatcher.isIn(noStopWords)) {
-            // Get apiCall from Ontology...
-            String apiAction = ontology.getApi(heardWord);
-            Log.d(TAG, String.format("Found action: %s , thanks to %s", apiAction, full ? "FULL" : "PARTIAL"));
-            actions.add(apiAction);
+        //String noStopWords = removeStopWords(heardWord);
+
+
+        List<String> separators = new ArrayList<String>();
+        // Get list of separators from the ontology
+        //separators = getSeparatorsFromOntology();
+        separators.add("et");
+        separators.add("puis");
+        separators.add("ensuite");
+        separators.add("enfin");
+        separators.add("avant");
+        // Use the separator in order to split the heard sentence and get the list of orders
+
+        List<String> orders = getOrders(separators, heardWord);
+        for (String order : orders) {
+            System.out.println("order:" + order);
+            if (ontologyMatcher.isIn(order)) {
+                String apiAction = ontology.getApi(order);
+                Log.d(TAG, String.format("Found action: %s , thanks to %s", apiAction, full ? "FULL" : "PARTIAL"));
+                actions.add(apiAction);
+            }
         }
+
+
 //        }
 
         if (actions.size() > 0) {
@@ -80,5 +100,31 @@ public class DroneActionLookup implements VoiceActionCommand {
             executor.doAction(actions.get(0));
         }
         return success;
+    }
+
+    public List<String> getOrders(List<String> separators, String heardWord) {
+        List<String> orders = new ArrayList<String>();
+        boolean exist = false;
+        for (int i = 0; i < separators.size(); i++) {
+            if (heardWord.contains(separators.get(i))) {
+                exist = true;
+            }
+        }
+        if (!exist) {
+            orders.add(heardWord.trim());
+            return orders;
+        } else {
+
+            for (int i = 0; i < separators.size(); i++) {
+                if (heardWord.contains(separators.get(i))) {
+                    String[] splitted = heardWord.split(separators.get(i));
+                    separators.remove(i);
+                    for (String heardPart : splitted) {
+                        orders.addAll(getOrders(separators, heardPart));
+                    }
+                }
+            }
+            return orders;
+        }
     }
 }

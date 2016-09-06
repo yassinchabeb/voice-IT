@@ -9,6 +9,9 @@ import com.parrot.arsdk.arcontroller.ARFrame;
  * Created by arielo on 8/22/16.
  */
 public interface JSDroneListener {
+
+    String TAG = "JSDroneListener";
+
     /**
      * Called when the connection to the drone changes
      * Called in the main thread

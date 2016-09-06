@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="voiceaction_yeswords">
+        <item>yes</item>
+        <item>ok</item>
+    </array>
+    <array name="voiceaction_nowords">
+        <item>no</item>
+    </array>
+    <array name="voiceaction_neutralwords">
+        <item>cancel</item>
+        <item>done</item>
+    </array>
+
+    <array name="voiceaction_wakeupphrases">
+        <item>bonjour sumo</item>
+        <item>bonjour mon ami</item>
+        <item>bonjour cocotte</item>
+    </array>
+
+    <string name="voiceaction_wakeupkey">bonjour</string>
+
+    <string name="voiceaction_cancelled_response">Cancelled.</string>
+
+    <string name="voiceaction_dontunderstand">Je n\'ai pas compris, repetez s\'il vous plaît.</string>
+    <!--<string name="voiceaction_unknown">Je n\'ai pas compris.</string>-->
+    <string name="voiceaction_unknown">Quoi?</string>
+    <string name="voiceaction_not_command">%1$s n\'est pas un action valide</string>
+    <!--<string name="voiceaction_heard_nothing">Je ne comprenais pas parce que je n\'ai rien entendu.</string>-->
+    <string name="voiceaction_heard_nothing">Tu n\'as rien dit</string>
+    <!--<string name="voiceaction_inaccurate">Je ne vous ai pas bien entendu.</string>-->
+    <string name="voiceaction_inaccurate">Je ne vous ai pas trop compris.</string>
+    <string name="voiceaction_retry">, redites s\'il te plaît.</string>
+</resources>

@@ -26,17 +26,26 @@ android {
     }
     packagingOptions {
         pickFirst 'META-INF/services/org.apache.lucene.analysis.util.TokenFilterFactory'
+//        pickFirst 'META-INF/services/org.openrdf.rio.RDFWriterFactory'
+//        pickFirst 'META-INF/services/org.openrdf.rio.RDFParserFactory'
+//        exclude 'META-INF/DEPENDENCIES'
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 }
 
 repositories {
-    mavenCentral()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+
     androidTestCompile 'com.android.support:support-annotations:23.4.0'
     androidTestCompile 'com.android.support.test:runner:0.4'
     androidTestCompile 'com.android.support.test:rules:0.4'
@@ -44,16 +53,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.parrot:arsdk:3.9.2'
-    compile 'edu.cmu.sphinx:sphinx4-core:5prealpha-SNAPSHOT'
-    compile 'edu.cmu.sphinx:sphinx4-data:5prealpha-SNAPSHOT'
-    compile 'org.apache.commons:commons-lang3:3.4'
+//    compile 'edu.cmu.sphinx:sphinx4-core:5prealpha-SNAPSHOT'
+//    compile 'edu.cmu.sphinx:sphinx4-data:5prealpha-SNAPSHOT'
+//    compile 'org.apache.commons:commons-lang3:3.4'
 //    compile 'org.apache.lucene:lucene-core:5.5.2'
 //    compile 'org.apache.lucene:lucene-analyzers-common:5.5.2'
-    compile ('org.apache.lucene:lucene-analyzers-phonetic:5.5.2') {
+    compile('org.apache.lucene:lucene-analyzers-phonetic:5.5.2') {
         exclude group: 'org.apache.lucene', module: 'lucene-core'
     }
+//    compile 'org.slf4j:slf4j-android:1.7.21'
 }
-
-ant.importBuild 'assets.xml'
-preBuild.dependsOn(list, checksum)
-clean.dependsOn(clean_assets)

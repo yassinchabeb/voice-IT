@@ -17,31 +17,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import com.android.internal.util.Predicate;
 import com.palo_it.com.myapplication.R;
-import com.palo_it.com.myapplication.actions.SpeechActionListener;
-import com.palo_it.com.myapplication.actions.SpeechToTextAction;
 import com.palo_it.com.myapplication.actions.TextToSpeechAction;
-import com.palo_it.com.myapplication.drone.JSDrone;
-import com.palo_it.com.myapplication.drone.JSDroneListener;
-import com.palo_it.com.myapplication.drone.JSDroneStatusListener;
-import com.palo_it.com.myapplication.parrot.ParrotController;
-import com.palo_it.com.myapplication.text.TextInterpreter;
+import com.palo_it.com.myapplication.drone.*;
+import com.palo_it.com.myapplication.speech.activation.SpeechActivationService;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM;
 import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
 import com.parrot.arsdk.arcontroller.ARControllerCodec;
 import com.parrot.arsdk.arcontroller.ARFrame;
-import org.apache.commons.lang3.EnumUtils;
 
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Deprecated
 public class StartSpeechActivity extends AppCompatActivity {
 
     public static final String TAG = "speech";
     private static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
     public static final int DATA_CHECK_CODE = 0;
+    public static final String WAKE_UP_PHRASE = "ok robot";
     private TextView mText;
     private TextToSpeechAction tts;
     private SpeechRecognizer speechRecognizer;
@@ -50,42 +43,42 @@ public class StartSpeechActivity extends AppCompatActivity {
     private AtomicBoolean recreating = new AtomicBoolean(false);
 
     //    private Handler droneActionsHandler;
-    private ParrotController parrotController;
-    private TextInterpreter textInterpreter;
+    private DroneService droneService;
+    //    private TextInterpreter textInterpreter;
     private AsyncTask<String, Void, Void> runDroneTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {
-            textInterpreter = TextInterpreter.getInstance(getAssets().open("sumonto.owl"));
-        } catch (IOException e) {
-            Log.e(TAG, "Error opening ontology file", e);
-        }
+//        try {
+//            textInterpreter = TextInterpreter.getInstance(getAssets().open("sumonto.owl"));
+//        } catch (IOException e) {
+//            Log.e(TAG, "Error opening ontology file", e);
+//        }
 //        droneActionsHandler = new Handler(Looper.getMainLooper());
         setContentView(R.layout.activity_start_speech);
-        parrotController = ParrotController.getInstance();
+        setupActions();
+        droneService = DroneService.getInstance();
         final Handler handler = new Handler(this.getMainLooper());
         if (mJSDrone == null) {
             progressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
             progressDialog.setIndeterminate(true);
             progressDialog.setMessage("Waiting for drone to come online...");
             progressDialog.show();
-            parrotController.initDiscoveryService(this, new Predicate<JSDrone>() {
+            droneService.initDiscoveryService(this, new DroneReadyListener() {
                 @Override
-                public boolean apply(JSDrone drone) {
+                public void onDroneReady(JSDrone drone) {
                     mJSDrone = drone;
-                    checkDroneStatus(drone.getConnectionState());
                     drone.setAsyncListener(new JSDroneStatusListener() {
                         @Override
                         public void asyncReceiver(Runnable task) {
                             handler.post(task);
                         }
                     });
+                    isDroneConnected();
                     drone.addListener(new JSDroneListener() {
                         @Override
                         public void onDroneConnectionChanged(ARCONTROLLER_DEVICE_STATE_ENUM state) {
-                            checkDroneStatus(state);
                         }
 
                         @Override
@@ -94,7 +87,8 @@ public class StartSpeechActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onPictureTaken(ARCOMMANDS_JUMPINGSUMO_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM error) {
+                        public void onPictureTaken
+                                (ARCOMMANDS_JUMPINGSUMO_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM error) {
 
                         }
 
@@ -138,13 +132,42 @@ public class StartSpeechActivity extends AppCompatActivity {
                         }
                     });
                     doConnectDrone();
-                    return true;
+                }
+
+                @Override
+                public boolean doConnectDrone() {
+                    if (mJSDrone.connect()) {
+                        View viewById = findViewById(R.id.jumpBt);
+                        viewById.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                v.setPressed(true);
+                                mJSDrone.doJump(JSDrone.JumpingStyle.HIGH);
+                            }
+                        });
+                        return true;
+                    }
+                    return false;
+                }
+
+                @Override
+                public boolean isDroneConnected() {
+                    if (mJSDrone.getConnectionState().equals(ARCONTROLLER_DEVICE_STATE_ENUM
+                            .ARCONTROLLER_DEVICE_STATE_RUNNING)) {
+                        progressDialog.setMessage("Drone online!");
+                        View viewById = findViewById(R.id.jumpBt);
+                        viewById.setVisibility(View.VISIBLE);
+                        progressDialog.dismiss();
+                        setupActions();
+                        return true;
+                    }
+                    return false;
                 }
             });
             mText = (TextView) findViewById(R.id.spokenText);
             // Here, thisActivity is the current activity
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) !=
+                    PackageManager.PERMISSION_GRANTED) {
 
                 // Should we show an explanation?
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
@@ -157,8 +180,8 @@ public class StartSpeechActivity extends AppCompatActivity {
 
                     // No explanation needed, we can request the permission.
 
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
-                            MY_PERMISSIONS_REQUEST_RECORD_AUDIO);
+                    ActivityCompat.requestPermissions(this, new String[]{
+                            Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_REQUEST_RECORD_AUDIO);
 
                     // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                     // app-defined int constant. The callback method gets the
@@ -167,34 +190,9 @@ public class StartSpeechActivity extends AppCompatActivity {
             }
         } else {
 //            doConnectDrone();
-            setupActions();
-        }
-//        setupActions();
-    }
-
-    private void checkDroneStatus(ARCONTROLLER_DEVICE_STATE_ENUM state) {
-        if (state.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING)) {
-            progressDialog.setMessage("Drone online!");
-            View viewById = findViewById(R.id.jumpBt);
-            viewById.setVisibility(View.VISIBLE);
-            progressDialog.dismiss();
-            setupActions();
+//            setupActions();
         }
     }
-
-    private void doConnectDrone() {
-        if (mJSDrone.connect()) {
-            View viewById = findViewById(R.id.jumpBt);
-            viewById.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    v.setPressed(true);
-                    mJSDrone.doJump(JSDrone.JumpingStyle.HIGH);
-                }
-            });
-        }
-    }
-
 
     @Override
     protected void onDestroy() {
@@ -209,7 +207,7 @@ public class StartSpeechActivity extends AppCompatActivity {
 ////                    progressDialog.show();
 //                        if (mJSDrone.disconnect()) {
 ////                        progressDialog.dismiss();
-//                            parrotController.closeServices();
+//                            droneService.closeServices();
 //                        }
 //                    }
 //                    return null;
@@ -229,64 +227,71 @@ public class StartSpeechActivity extends AppCompatActivity {
     }
 
     private void setupActions() {
-        //check for TTS data
-        Intent checkTTSIntent = new Intent();
-        checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkTTSIntent, DATA_CHECK_CODE);
-        speechRecognizer = SpeechToTextAction.createRecognizer(this, new SpeechActionListener() {
-            @Override
-            public boolean partialResult(final String partialText) {
-                mText.setText(partialText);
-                final String matchedText = textInterpreter.matchText(partialText);
-                if (matchedText != null) {
-                    Log.d(TAG, "Running Action: " + matchedText);
-                    say(matchedText);
-                    runDroneTask = new AsyncTask<String, Void, Void>() {
-                        private long startTime;
+//        check for TTS data
+//        Intent checkTTSIntent = new Intent();
+//        checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+//        startActivityForResult(checkTTSIntent, DATA_CHECK_CODE);
 
-                        @Override
-                        protected void onPreExecute() {
-                            Log.d(TAG, "Starting execute robot command... ");
-                            startTime = System.currentTimeMillis();
-                        }
+        Intent intent = SpeechActivationService.makeStartServiceIntent(this);
+        StartSpeechActivity.this.startService(intent);
+//        Log.d(TAG, "started service for " + SpeechActivationService.WAKE_UP_PHRASES);
 
-                        @Override
-                        protected Void doInBackground(String... params) {
-                            if (mJSDrone != null) {
-                                for (String text : params) {
-                                    mJSDrone.doSomething(EnumUtils.getEnum(JSDrone.ACTIONS.class, text.toUpperCase()));
-                                }
-                            }
-                            Log.d(TAG, "robot command executed in:  " + (System.currentTimeMillis() - startTime) + " ms");
-                            return null;
-                        }
-                    }.execute(matchedText);
-//                    droneActionsHandler.post(new Runnable() {
-//                        @Override
-//                        public void run() {
+//        speechRecognizer = SpeechToTextAction.createRecognizer(this, new SpeechActionListener() {
+//            @Override
+//            public boolean partialResult(final String partialText) {
+//                mText.setText(partialText);
+//                final String matchedText = textInterpreter.matchText(partialText);
+//                if (matchedText != null) {
+//                    Log.d(TAG, "Running Action: " + matchedText);
+//                    say(matchedText);
+//                    runDroneTask = new AsyncTask<String, Void, Void>() {
+//                        private long startTime;
 //
+//                        @Override
+//                        protected void onPreExecute() {
+//                            Log.d(TAG, "Starting execute robot command... ");
+//                            startTime = System.currentTimeMillis();
 //                        }
-//                    });
-                    return true;
-                }
-                return false;
-            }
+//
+//                        @Override
+//                        protected Void doInBackground(String... params) {
+//                            if (mJSDrone != null) {
+//                                for (String text : params) {
+//                                    mJSDrone.doSomething(EnumUtils.getEnum(JSDrone.ACTIONS.class, text.toUpperCase
+// ()));
+//                                }
+//                            }
+//                            Log.d(TAG, "robot command executed in:  " + (System.currentTimeMillis() - startTime) +
+// " ms");
+//                            return null;
+//                        }
+//                    }.execute(matchedText);
+////                    droneActionsHandler.post(new Runnable() {
+////                        @Override
+////                        public void run() {
+////
+////                        }
+////                    });
+//                    return true;
+//                }
+//                return false;
+//            }
 
-            @Override
-            public void finalResult(String finalText) {
-                try {
-                    Thread.sleep(2000);
-                    recreating.set(true);
-                    if (runDroneTask != null && !runDroneTask.getStatus().equals(AsyncTask.Status.FINISHED)) {
-                        runDroneTask.get();
-                    }
-                    recreate();
-                    recreating.set(false);
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, "ok robot");
+//            @Override
+//            public void finalResult(String finalText) {
+//                try {
+//                    Thread.sleep(2000);
+//                    recreating.set(true);
+//                    if (runDroneTask != null && !runDroneTask.getStatus().equals(AsyncTask.Status.FINISHED)) {
+//                        runDroneTask.get();
+//                    }
+//                    recreate();
+//                    recreating.set(false);
+//                } catch (InterruptedException | ExecutionException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, WAKE_UP_PHRASES);
     }
 
     private void say(String partialText) {
@@ -327,8 +332,7 @@ public class StartSpeechActivity extends AppCompatActivity {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_RECORD_AUDIO: {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.

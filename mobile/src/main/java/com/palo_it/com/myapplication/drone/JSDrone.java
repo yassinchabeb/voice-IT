@@ -2,10 +2,7 @@ package com.palo_it.com.myapplication.drone;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
-import com.parrot.arsdk.arcommands.ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_ENUM;
-import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM;
-import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM;
-import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM;
+import com.parrot.arsdk.arcommands.*;
 import com.parrot.arsdk.arcontroller.*;
 import com.parrot.arsdk.ardiscovery.*;
 import com.parrot.arsdk.arsal.ARNativeData;
@@ -90,7 +87,8 @@ public class JSDrone {
      */
     public boolean connect() {
         boolean success = false;
-        if ((mDeviceController != null) && (ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_STOPPED.equals(mState))) {
+        if ((mDeviceController != null) &&
+                (ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_STOPPED.equals(mState))) {
             ARCONTROLLER_ERROR_ENUM error = mDeviceController.start();
             if (error == ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK) {
                 success = true;
@@ -108,7 +106,8 @@ public class JSDrone {
      */
     public boolean disconnect() {
         boolean success = false;
-        if ((mDeviceController != null) && (ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING.equals(mState))) {
+        if ((mDeviceController != null) &&
+                (ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING.equals(mState))) {
             ARCONTROLLER_ERROR_ENUM error = mDeviceController.stop();
             if (error == ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK) {
                 success = true;
@@ -127,7 +126,8 @@ public class JSDrone {
     }
 
     public void takePicture() {
-        if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
+        if ((mDeviceController != null) &&
+                (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
             // JumpingSumo (not evo) are still using old deprecated command
             if (ARDISCOVERY_PRODUCT_ENUM.ARDISCOVERY_PRODUCT_JS.equals(mProductType)) {
                 mDeviceController.getFeatureJumpingSumo().sendMediaRecordPicture((byte) 0);
@@ -141,7 +141,8 @@ public class JSDrone {
     public void setAudioStreamEnabled(boolean input, boolean output) {
         byte value = (byte) ((input ? 1 : 0) | (output ? 2 : 0));
 
-        if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
+        if ((mDeviceController != null) &&
+                (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
             mDeviceController.getFeatureCommon().sendAudioControllerReadyForStreaming(value);
         }
     }
@@ -153,7 +154,8 @@ public class JSDrone {
      * @param speed value in percentage from -100 to 100
      */
     public void setSpeed(byte speed) {
-        if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
+        if ((mDeviceController != null) &&
+                (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
             mDeviceController.getFeatureJumpingSumo().setPilotingPCMDSpeed(speed);
         }
     }
@@ -163,16 +165,23 @@ public class JSDrone {
      * Note that {@link JSDrone#setFlag(byte)} should be set to 1 in order to take in account the speed value
      */
     public void doJump(JumpingStyle style) {
-        if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
+        if ((mDeviceController != null) &&
+                (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
             switch (style) {
                 case HIGH:
-                    mDeviceController.getFeatureJumpingSumo().sendAnimationsJump(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_HIGH);
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsJump
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_HIGH);
                     break;
                 case LONG:
-                    mDeviceController.getFeatureJumpingSumo().sendAnimationsJump(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_LONG);
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsJump
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_LONG);
                     break;
                 case MAX:
-                    mDeviceController.getFeatureJumpingSumo().sendAnimationsJump(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_MAX);
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsJump
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_MAX);
             }
         }
     }
@@ -184,7 +193,8 @@ public class JSDrone {
      * @param turn value in percentage from -100 to 100
      */
     public void setTurn(byte turn) {
-        if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
+        if ((mDeviceController != null) &&
+                (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
             mDeviceController.getFeatureJumpingSumo().setPilotingPCMDTurn(turn);
         }
     }
@@ -195,7 +205,8 @@ public class JSDrone {
      * @param flag 1 if the speed and turn values should be used, 0 otherwise
      */
     public void setFlag(byte flag) {
-        if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
+        if ((mDeviceController != null) &&
+                (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
             mDeviceController.getFeatureJumpingSumo().setPilotingPCMDFlag(flag);
         }
     }
@@ -222,16 +233,20 @@ public class JSDrone {
 
     public void doATourAndComeBack() {
         if (mDeviceController != null) {
-            mDeviceController.getFeatureCommon().sendAnimationsStartAnimation(ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_ENUM.ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_HEADLIGHTS_BLINK);
+            mDeviceController.getFeatureCommon().sendAnimationsStartAnimation
+                    (ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_ENUM
+                            .ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_HEADLIGHTS_BLINK);
         }
     }
 
-    private ARDiscoveryDevice createDiscoveryDevice(@NonNull ARDiscoveryDeviceService service, ARDISCOVERY_PRODUCT_ENUM productType) {
+    private ARDiscoveryDevice createDiscoveryDevice(@NonNull ARDiscoveryDeviceService service,
+                                                    ARDISCOVERY_PRODUCT_ENUM productType) {
         ARDiscoveryDevice device = null;
         try {
             device = new ARDiscoveryDevice();
             ARDiscoveryDeviceNetService netDeviceService = (ARDiscoveryDeviceNetService) service.getDevice();
-            device.initWifi(productType, netDeviceService.getName(), netDeviceService.getIp(), netDeviceService.getPort());
+            device.initWifi(productType, netDeviceService.getName(), netDeviceService.getIp(), netDeviceService
+                    .getPort());
 
         } catch (ARDiscoveryException e) {
             Log.e(TAG, "Exception", e);
@@ -256,7 +271,8 @@ public class JSDrone {
     }
 
     public void sendStreamingFrame(ARNativeData data) {
-        if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
+        if ((mDeviceController != null) &&
+                (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
             mDeviceController.sendStreamingFrame(data);
         }
     }
@@ -264,7 +280,8 @@ public class JSDrone {
     public boolean hasOutputVideoStream() {
         boolean res = false;
 
-        if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
+        if ((mDeviceController != null) &&
+                (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
             try {
                 res = mDeviceController.hasOutputVideoStream();
             } catch (ARControllerException e) {
@@ -416,7 +433,8 @@ public class JSDrone {
 
     private final ARDeviceControllerListener mDeviceControllerListener = new ARDeviceControllerListener() {
         @Override
-        public void onStateChanged(ARDeviceController deviceController, ARCONTROLLER_DEVICE_STATE_ENUM newState, ARCONTROLLER_ERROR_ENUM error) {
+        public void onStateChanged(ARDeviceController deviceController, ARCONTROLLER_DEVICE_STATE_ENUM newState,
+                                   ARCONTROLLER_ERROR_ENUM error) {
             mState = newState;
             if (ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING.equals(mState)) {
                 mDeviceController.getFeatureJumpingSumo().sendMediaStreamingVideoEnable((byte) 1);
@@ -432,16 +450,24 @@ public class JSDrone {
         }
 
         @Override
-        public void onExtensionStateChanged(ARDeviceController deviceController, ARCONTROLLER_DEVICE_STATE_ENUM newState, ARDISCOVERY_PRODUCT_ENUM product, String name, ARCONTROLLER_ERROR_ENUM error) {
+        public void onExtensionStateChanged(ARDeviceController deviceController, ARCONTROLLER_DEVICE_STATE_ENUM
+                newState, ARDISCOVERY_PRODUCT_ENUM product, String name, ARCONTROLLER_ERROR_ENUM error) {
         }
 
         @Override
-        public void onCommandReceived(ARDeviceController deviceController, ARCONTROLLER_DICTIONARY_KEY_ENUM commandKey, ARControllerDictionary elementDictionary) {
+        public void onCommandReceived(ARDeviceController deviceController, ARCONTROLLER_DICTIONARY_KEY_ENUM
+                commandKey, ARControllerDictionary elementDictionary) {
             // if event received is the battery update
-            if ((commandKey == ARCONTROLLER_DICTIONARY_KEY_ENUM.ARCONTROLLER_DICTIONARY_KEY_COMMON_COMMONSTATE_BATTERYSTATECHANGED) && (elementDictionary != null)) {
-                ARControllerArgumentDictionary<Object> args = elementDictionary.get(ARControllerDictionary.ARCONTROLLER_DICTIONARY_SINGLE_KEY);
+            if ((commandKey ==
+                    ARCONTROLLER_DICTIONARY_KEY_ENUM
+                            .ARCONTROLLER_DICTIONARY_KEY_COMMON_COMMONSTATE_BATTERYSTATECHANGED) &&
+                    (elementDictionary != null)) {
+                ARControllerArgumentDictionary<Object> args =
+                        elementDictionary.get(ARControllerDictionary.ARCONTROLLER_DICTIONARY_SINGLE_KEY);
                 if (args != null) {
-                    final int battery = (Integer) args.get(ARFeatureCommon.ARCONTROLLER_DICTIONARY_KEY_COMMON_COMMONSTATE_BATTERYSTATECHANGED_PERCENT);
+                    final int battery =
+                            (Integer) args.get(ARFeatureCommon
+                                    .ARCONTROLLER_DICTIONARY_KEY_COMMON_COMMONSTATE_BATTERYSTATECHANGED_PERCENT);
                     asyncListener.asyncReceiver(new Runnable() {
                         @Override
                         public void run() {
@@ -451,11 +477,17 @@ public class JSDrone {
                 }
             }
             // if event received is the picture notification
-            else if ((commandKey == ARCONTROLLER_DICTIONARY_KEY_ENUM.ARCONTROLLER_DICTIONARY_KEY_JUMPINGSUMO_MEDIARECORDEVENT_PICTUREEVENTCHANGED) && (elementDictionary != null)) {
-                ARControllerArgumentDictionary<Object> args = elementDictionary.get(ARControllerDictionary.ARCONTROLLER_DICTIONARY_SINGLE_KEY);
+            else if ((commandKey ==
+                    ARCONTROLLER_DICTIONARY_KEY_ENUM
+                            .ARCONTROLLER_DICTIONARY_KEY_JUMPINGSUMO_MEDIARECORDEVENT_PICTUREEVENTCHANGED) &&
+                    (elementDictionary != null)) {
+                ARControllerArgumentDictionary<Object> args =
+                        elementDictionary.get(ARControllerDictionary.ARCONTROLLER_DICTIONARY_SINGLE_KEY);
                 if (args != null) {
                     final ARCOMMANDS_JUMPINGSUMO_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM error =
-                            ARCOMMANDS_JUMPINGSUMO_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM.getFromValue((Integer) args.get(ARFeatureJumpingSumo.ARCONTROLLER_DICTIONARY_KEY_JUMPINGSUMO_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR));
+                            ARCOMMANDS_JUMPINGSUMO_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM.getFromValue(
+                                    (Integer) args.get(ARFeatureJumpingSumo
+                                            .ARCONTROLLER_DICTIONARY_KEY_JUMPINGSUMO_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR));
                     asyncListener.asyncReceiver(new Runnable() {
                         @Override
                         public void run() {
@@ -465,10 +497,15 @@ public class JSDrone {
                 }
             }
             // if event received is the run id
-            else if ((commandKey == ARCONTROLLER_DICTIONARY_KEY_ENUM.ARCONTROLLER_DICTIONARY_KEY_COMMON_RUNSTATE_RUNIDCHANGED) && (elementDictionary != null)) {
-                ARControllerArgumentDictionary<Object> args = elementDictionary.get(ARControllerDictionary.ARCONTROLLER_DICTIONARY_SINGLE_KEY);
+            else if ((commandKey ==
+                    ARCONTROLLER_DICTIONARY_KEY_ENUM.ARCONTROLLER_DICTIONARY_KEY_COMMON_RUNSTATE_RUNIDCHANGED) &&
+                    (elementDictionary != null)) {
+                ARControllerArgumentDictionary<Object> args =
+                        elementDictionary.get(ARControllerDictionary.ARCONTROLLER_DICTIONARY_SINGLE_KEY);
                 if (args != null) {
-                    final String runID = (String) args.get(ARFeatureCommon.ARCONTROLLER_DICTIONARY_KEY_COMMON_RUNSTATE_RUNIDCHANGED_RUNID);
+                    final String runID =
+                            (String) args.get(ARFeatureCommon
+                                    .ARCONTROLLER_DICTIONARY_KEY_COMMON_RUNSTATE_RUNIDCHANGED_RUNID);
                     asyncListener.asyncReceiver(new Runnable() {
                         @Override
                         public void run() {
@@ -478,10 +515,16 @@ public class JSDrone {
                 }
             }
             // if event received is the audio state notification
-            else if ((commandKey == ARCONTROLLER_DICTIONARY_KEY_ENUM.ARCONTROLLER_DICTIONARY_KEY_COMMON_AUDIOSTATE_AUDIOSTREAMINGRUNNING) && (elementDictionary != null)) {
-                ARControllerArgumentDictionary<Object> args = elementDictionary.get(ARControllerDictionary.ARCONTROLLER_DICTIONARY_SINGLE_KEY);
+            else if ((commandKey ==
+                    ARCONTROLLER_DICTIONARY_KEY_ENUM
+                            .ARCONTROLLER_DICTIONARY_KEY_COMMON_AUDIOSTATE_AUDIOSTREAMINGRUNNING) &&
+                    (elementDictionary != null)) {
+                ARControllerArgumentDictionary<Object> args =
+                        elementDictionary.get(ARControllerDictionary.ARCONTROLLER_DICTIONARY_SINGLE_KEY);
                 if (args != null) {
-                    final int state = (Integer) args.get(ARFeatureCommon.ARCONTROLLER_DICTIONARY_KEY_COMMON_AUDIOSTATE_AUDIOSTREAMINGRUNNING_RUNNING);
+                    final int state =
+                            (Integer) args.get(ARFeatureCommon
+                                    .ARCONTROLLER_DICTIONARY_KEY_COMMON_AUDIOSTATE_AUDIOSTREAMINGRUNNING_RUNNING);
                     final boolean inputEnabled = (state & 0x01) != 0;
                     final boolean outputEnabled = (state & 0x02) != 0;
 
@@ -498,7 +541,8 @@ public class JSDrone {
 
     private final ARDeviceControllerStreamListener mStreamListener = new ARDeviceControllerStreamListener() {
         @Override
-        public ARCONTROLLER_ERROR_ENUM configureDecoder(ARDeviceController deviceController, final ARControllerCodec codec) {
+        public ARCONTROLLER_ERROR_ENUM configureDecoder(ARDeviceController deviceController, final ARControllerCodec
+                codec) {
             notifyConfigureDecoder(codec);
             return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
         }
@@ -516,7 +560,8 @@ public class JSDrone {
 
     private final ARDeviceControllerStreamListener mAudioStreamListener = new ARDeviceControllerStreamListener() {
         @Override
-        public ARCONTROLLER_ERROR_ENUM configureDecoder(ARDeviceController deviceController, final ARControllerCodec codec) {
+        public ARCONTROLLER_ERROR_ENUM configureDecoder(ARDeviceController deviceController, final ARControllerCodec
+                codec) {
             notifyConfigureAudioDecoder(codec);
             return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
         }
@@ -533,7 +578,9 @@ public class JSDrone {
     };
 
     public enum ACTIONS {
-        FORWARD, BACKWARD, LEFT, RIGHT, STOP, ANIMATIONSLONGJUMP, POSTUREKICKER
+        FORWARD, BACKWARD, LEFT, RIGHT, STOP, ANIMATIONSLONGJUMP, ANIMATIONSTAP, ANIMATIONSSPIRAL,
+        ANIMATIONSSPINTOPOSTURE, ANIMATIONSSPINJUMP, ANIMATIONSSPIN, ANIMATIONSSLOWSHAKE, ANIMATIONSSLALOM,
+        ANIMATIONSONDULATION, ANIMATIONSMETRONOME, ANIMATIONSHIGHJUMP, UNKNOWN
     }
 
     public void doSomething(ACTIONS action) {
@@ -555,10 +602,65 @@ public class JSDrone {
                     mDeviceController.getFeatureCommon().sendAnimationsStopAllAnimations();
                     break;
                 case ANIMATIONSLONGJUMP:
-                    mDeviceController.getFeatureJumpingSumo().sendAnimationsJump(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_LONG);
+                    mDeviceController.getFeatureJumpingSumo().sendPilotingPosture
+                            (ARCOMMANDS_JUMPINGSUMO_PILOTING_POSTURE_TYPE_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_PILOTING_POSTURE_TYPE_JUMPER);
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsJump
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_LONG);
                     break;
-                default:
-                    mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_TAP);
+                case ANIMATIONSSPIN:
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPIN);
+                    break;
+                case ANIMATIONSSPIRAL:
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPIRAL);
+                    break;
+                case ANIMATIONSTAP:
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_TAP);
+                    break;
+                case ANIMATIONSSLALOM:
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SLALOM);
+                    break;
+                case ANIMATIONSSLOWSHAKE:
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SLOWSHAKE);
+                    break;
+                case ANIMATIONSMETRONOME:
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_METRONOME);
+                    break;
+                case ANIMATIONSONDULATION:
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ONDULATION);
+                    break;
+                case ANIMATIONSHIGHJUMP:
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsJump
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_HIGH);
+                    break;
+                case ANIMATIONSSPINJUMP:
+                    mDeviceController.getFeatureJumpingSumo().sendPilotingPosture
+                            (ARCOMMANDS_JUMPINGSUMO_PILOTING_POSTURE_TYPE_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_PILOTING_POSTURE_TYPE_JUMPER);
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPINJUMP);
+                    break;
+                case UNKNOWN:
+                    mDeviceController.getFeatureCommon().sendAnimationsStartAnimation
+                            (ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_ENUM
+                                    .ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_HEADLIGHTS_BLINK);
             }
         }
     }

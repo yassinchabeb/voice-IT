@@ -1,7 +1,6 @@
 package com.palo_it.com.myapplication.actions;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
@@ -9,10 +8,9 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import com.palo_it.com.myapplication.R;
-import org.apache.commons.lang3.StringUtils;
+//import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
@@ -45,8 +43,10 @@ public class SpeechToTextAction {
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, activity.getPackageName());
         intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "fr-FR");
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "fr-FR");
+        intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, "fr-FR");
         intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
-        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 10000);
+//        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 10000);
 //        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 500);
 //        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 2500);
 //            intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
@@ -141,17 +141,17 @@ public class SpeechToTextAction {
                 if (!partialText.isEmpty()) {
                     Log.d(TAG, String.format("onPartialResults: %s", partialText));
                     if (isAwake) {
-                        String onlyActions = StringUtils.remove(partialText, wakeUpPhraseText);
-                        if (!onlyActions.isEmpty()) {
-                            findActions(partialText);
-                        }
+//                        String onlyActions = StringUtils.remove(partialText, wakeUpPhraseText);
+//                        if (!onlyActions.isEmpty()) {/
+//                            findActions(partialText);
+//                        }
                     } else {
-                        if (StringUtils.getLevenshteinDistance(partialText, wakeUpPhraseText) < 4) {
+//                        if (StringUtils.getLevenshteinDistance(partialText, wakeUpPhraseText) < 4) {
                             isAwake = true;
                             speechRecognizer.stopListening();
                             intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 10000);
                             speechRecognizer.startListening(intent);
-                        }
+//                        }
                     }
                 }
             }
@@ -159,13 +159,13 @@ public class SpeechToTextAction {
 
         private void findActions(String partialText) {
             String existing = partialResult.get();
-            String onlyActions = StringUtils.remove(partialText, existing);
-            if (!onlyActions.isEmpty()) {
-                if (textHandler.partialResult(onlyActions)) {
-                    speechRecognizer.stopListening();
-                }
-            }
-            partialResult.set(partialText);
+//            String onlyActions = StringUtils.remove(partialText, existing);
+//            if (!onlyActions.isEmpty()) {
+//                if (textHandler.partialResult(onlyActions)) {
+//                    speechRecognizer.stopListening();
+//                }
+//            }
+//            partialResult.set(partialText);
         }
 
         public void onEvent(int eventType, Bundle params) {

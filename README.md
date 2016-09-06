@@ -1,6 +1,7 @@
 # VOICE-IT
 Playing around with Android's Speech-to-text &amp; Text-to-Speech; Setting up a Wake-up-word other than OK Google, and trying to match converted text to a given Ontology
 
+[![Demo](http://img.youtube.com/vi/u0rYmZlU3U0/0.jpg)](http://www.youtube.com/watch?v=u0rYmZlU3U0 "Demo")
 
 ## WHY, OH WHY
 Well, one of our clients wanted a Virtual Assistant hands free to handle orders like 'Send me a bunch of PRODUCT-X next week', 'Send the same as last week' or 'Wheres my stuff?!'

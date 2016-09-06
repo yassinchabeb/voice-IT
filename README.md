@@ -34,3 +34,15 @@ API method is then executed and our current implementation makes our drone move 
 
 ### A basic Architecture diagram
 ![Archi!](https://github.com/Palo-IT/voice-IT/blob/master/img/archi.jpeg)
+
+
+### What's next??!
+Well, there's a bunch of things we would like to do:
+
+* Recognize natural speech and not just words
+* Parse a list of actions instead of just one-at-a-time commands (Combo!)
+* Parse text and recognize actions and parameters via NLP (Natural language Processing)
+* Make everything work on a RaspberryPi!
+    * Speech-to-text (offline ideally)
+    * Text-to-speech
+* Use Apache Jena to parse and search through the Ontology

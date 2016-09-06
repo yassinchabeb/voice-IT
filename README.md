@@ -39,10 +39,12 @@ API method is then executed and our current implementation makes our drone move 
 ### What's next??!
 Well, there's a bunch of things we would like to do:
 
+* On Android, avoid the Speech recognizer dialog with button. Tried it, but it's buggy!
+* Improve time between '*recognized Wake up Word*' and '*ready to receive commands*' 
 * Recognize natural speech and not just words
 * Parse a list of actions instead of just one-at-a-time commands (Combo!)
 * Parse text and recognize actions and parameters via NLP (Natural language Processing)
 * Make everything work on a RaspberryPi!
     * Speech-to-text (offline ideally)
     * Text-to-speech
-* Use Apache Jena to parse and search through the Ontology
+* Use [Apache Jena](https://github.com/sbrunk/jena-android) to parse and search through the Ontology

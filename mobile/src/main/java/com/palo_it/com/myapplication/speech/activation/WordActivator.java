@@ -120,7 +120,6 @@ public class WordActivator implements SpeechActivator, RecognitionListener {
         }
 
         if (heardTargetWord) {
-            stop();
             Log.d(TAG, "HEARD IT!");
             resultListener.activated(true);
 

@@ -33,4 +33,4 @@ API method is then executed and our current implementation makes our drone move 
 
 
 ### A basic Architecture diagram
-![Archi!](https://github.com/Palo-IT/voice-IT/blob/gastInstall/img/archi.jpeg)
+![Archi!](https://github.com/Palo-IT/voice-IT/blob/master/img/archi.jpeg)

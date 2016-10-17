@@ -580,23 +580,23 @@ public class JSDrone {
     public enum ACTIONS {
         FORWARD, BACKWARD, LEFT, RIGHT, STOP, ANIMATIONSLONGJUMP, ANIMATIONSTAP, ANIMATIONSSPIRAL,
         ANIMATIONSSPINTOPOSTURE, ANIMATIONSSPINJUMP, ANIMATIONSSPIN, ANIMATIONSSLOWSHAKE, ANIMATIONSSLALOM,
-        ANIMATIONSONDULATION, ANIMATIONSMETRONOME, ANIMATIONSHIGHJUMP, UNKNOWN
+        ANIMATIONSONDULATION, ANIMATIONSMETRONOME, ANIMATIONSHIGHJUMP, UNKNOWN, TRIANGLE, SQUARE, DANSE
     }
 
     public void doSomething(ACTIONS action) {
         if (action != null) {
             switch (action) {
                 case LEFT:
-                    doTurn((byte) -20);
+                    doTurn((byte) -20, 1000);
                     break;
                 case RIGHT:
-                    doTurn((byte) 20);
+                    doTurn((byte) 20, 1000);
                     break;
                 case FORWARD:
-                    doMove((byte) 50);
+                    doMove((byte) 50, 1000);
                     break;
                 case BACKWARD:
-                    doMove((byte) -50);
+                    doMove((byte) -50, 1000);
                     break;
                 case STOP:
                     mDeviceController.getFeatureCommon().sendAnimationsStopAllAnimations();
@@ -657,6 +657,11 @@ public class JSDrone {
                             (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
                                     .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPINJUMP);
                     break;
+                case TRIANGLE:
+                    drawTriangle();
+                    break;
+                case SQUARE:
+                    drawSquare();
                 case UNKNOWN:
                     mDeviceController.getFeatureCommon().sendAnimationsStartAnimation
                             (ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_ENUM
@@ -665,11 +670,29 @@ public class JSDrone {
         }
     }
 
-    private void doTurn(byte turn) {
+    private void drawSquare() {
+        doMove((byte) 50, 1000);
+        doTurn((byte) 15, 1000);
+        doMove((byte) 50, 1000);
+        doTurn((byte) 15, 1000);
+        doMove((byte) 50, 1000);
+        doTurn((byte) 15, 1000);
+        doMove((byte) 50, 1000);
+    }
+
+    private void drawTriangle() {
+        doMove((byte) 50, 1000);
+        doTurn((byte) 16.67, 1000);
+        doMove((byte) 50, 1000);
+        doTurn((byte) 16.67, 1000);
+        doMove((byte) 50, 1000);
+    }
+
+    private void doTurn(byte turn, int animationTime) {
         try {
             setTurn(turn);
             setFlag((byte) 1);
-            Thread.sleep(1000);
+            Thread.sleep(animationTime);
             setTurn((byte) 0);
             setFlag((byte) 0);
         } catch (InterruptedException e) {
@@ -677,11 +700,11 @@ public class JSDrone {
         }
     }
 
-    private void doMove(byte speed) {
+    private void doMove(byte speed, int animationTime) {
         try {
             setSpeed(speed);
             setFlag((byte) 1);
-            Thread.sleep(1000);
+            Thread.sleep(animationTime);
             setSpeed((byte) 0);
             setFlag((byte) 0);
         } catch (InterruptedException e) {

@@ -142,7 +142,7 @@
     <owl:Class
         rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#animationsOndulation">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="fr">animation ondulation;ondulation;dansez;danse</command>
+        <command xml:lang="fr">animation ondulation;ondulation;dancez;danse</command>
         <command xml:lang="en">ondulation animation;ondulation;dance</command>
     </owl:Class>
 
@@ -586,6 +586,17 @@
         <loop rdf:datatype="http://www.w3.org/2001/XMLSchema#int"></loop>
     </owl:Class>
 
+    <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#triangle">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
+        <command xml:lang="fr">dessine un triangle;triangle;pyramid</command>
+        <command xml:lang="en">draw a triangle;make a triangle;pyramid</command>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#square">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
+        <command xml:lang="fr">déssine un carre;déssine une boite;carré</command>
+        <command xml:lang="en">draw a triangle;make a triangle;pyramid</command>
+    </owl:Class>
 
     <!-- http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#stop -->
 

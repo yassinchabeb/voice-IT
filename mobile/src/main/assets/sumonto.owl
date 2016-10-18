@@ -602,7 +602,7 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#stop">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="fr">stop;arrête;arrêtez;pause;pause-toi;pausez-vous;arrêter;arrêter vous</command>
+        <command xml:lang="fr">stop;arrête;arrêtez;pause;pause-toi;pausez-vous;arrêter;arrêtez vous</command>
         <command xml:lang="en">stop;stop it;pause;</command>
     </owl:Class>
 </rdf:RDF>

@@ -7,13 +7,14 @@ import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.palo_it.com.myapplication.R;
 import com.palo_it.com.myapplication.activity.SpeechRecognizingActivity;
-import com.palo_it.com.myapplication.drone.*;
-import com.parrot.arsdk.arcommands.ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_ENUM;
-import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM;
-import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM;
-import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_PILOTING_POSTURE_TYPE_ENUM;
+import com.palo_it.com.myapplication.drone.DroneReadyListener;
+import com.palo_it.com.myapplication.drone.DroneService;
+import com.palo_it.com.myapplication.drone.JSDrone;
+import com.palo_it.com.myapplication.drone.JSDroneListenerBase;
+import com.palo_it.com.myapplication.drone.JSDroneStatusListener;
 import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
 
 public class DroneExecutor extends VoiceActionExecutor implements DroneReadyListener {

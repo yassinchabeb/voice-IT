@@ -10,6 +10,10 @@ import android.widget.Toast;
 import com.palo_it.com.myapplication.R;
 import com.palo_it.com.myapplication.activity.SpeechRecognizingActivity;
 import com.palo_it.com.myapplication.drone.*;
+import com.parrot.arsdk.arcommands.ARCOMMANDS_COMMON_ANIMATIONS_STARTANIMATION_ANIM_ENUM;
+import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_JUMP_TYPE_ENUM;
+import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM;
+import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_PILOTING_POSTURE_TYPE_ENUM;
 import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
 
 public class DroneExecutor extends VoiceActionExecutor implements DroneReadyListener {
@@ -20,6 +24,7 @@ public class DroneExecutor extends VoiceActionExecutor implements DroneReadyList
     private ProgressDialog progressDialog;
     private JSDrone drone;
     private TextToSpeech tts;
+    String name = "NULL";
 
     public DroneExecutor(SpeechRecognizingActivity speech) {
         super(speech);
@@ -46,9 +51,32 @@ public class DroneExecutor extends VoiceActionExecutor implements DroneReadyList
         while (tts.isSpeaking()) ;
     }
 
-    public void doAction(String action) {
+
+
+
+    public void doAction(String action, String message) {
+
+
+        if (action != null) {
+            switch (action.toUpperCase()) {
+                case "MYNAMEIS":
+                    name = "monsieur";
+                    action = "Enchanté monsieur";
+                    message = "";
+                    //break;
+                case "WHATSMYNAME":
+                    if (name.equals("NULL"))
+                    action = "Je ne sais pas";
+                    else
+                    action = "Vous vous zappelez " + name;
+                    message = "";
+                    //break;
+            }
+        }
+
+
         speak(action);
-        Toast.makeText(activity, (action.equalsIgnoreCase("sayright")||action.equalsIgnoreCase("sayleft")?"Bonjour à tous":action) , Toast.LENGTH_LONG).show();
+        Toast.makeText(activity, action + message , Toast.LENGTH_LONG).show();
         JSDrone.ACTIONS actionEnum = getOrNull(JSDrone.ACTIONS.class, action.toUpperCase());
         if (actionEnum != null) {
             if (actionEnum.equals(JSDrone.ACTIONS.STOP)) {

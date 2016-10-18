@@ -15,11 +15,12 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
+
+import java.util.Locale;
+
 import root.gast.speech.SpeechRecognitionUtil;
 import root.gast.speech.tts.TextToSpeechInitializer;
 import root.gast.speech.tts.TextToSpeechStartupListener;
-
-import java.util.Locale;
 
 public abstract class SpeechRecognizingAndSpeakingActivity extends SpeechRecognizingActivity implements
         TextToSpeechStartupListener {

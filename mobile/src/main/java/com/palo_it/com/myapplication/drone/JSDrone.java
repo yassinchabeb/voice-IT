@@ -1,7 +1,12 @@
 package com.palo_it.com.myapplication.drone;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.palo_it.com.myapplication.R;
 import com.parrot.arsdk.arcommands.*;
 import com.parrot.arsdk.arcontroller.*;
 import com.parrot.arsdk.ardiscovery.*;
@@ -15,7 +20,7 @@ import java.util.List;
 
 public class JSDrone {
     private static final String TAG = "JSDrone";
-    private int i = 0;
+    private String name = "NULL";
 
     private static final int DEVICE_PORT = 21;
     private JSDroneStatusListener asyncListener;
@@ -581,7 +586,7 @@ public class JSDrone {
     public enum ACTIONS {
         FORWARD, BACKWARD, LEFT, RIGHT, STOP, ANIMATIONSLONGJUMP, ANIMATIONSTAP, ANIMATIONSSPIRAL,
         ANIMATIONSSPINTOPOSTURE, ANIMATIONSSPINJUMP, ANIMATIONSSPIN, ANIMATIONSSLOWSHAKE, ANIMATIONSSLALOM,
-        ANIMATIONSONDULATION, ANIMATIONSMETRONOME, ANIMATIONSHIGHJUMP, UNKNOWN, TRIANGLE, SQUARE, RETURN, FOLLOW, SAYRIGHT, SAYLEFT
+        ANIMATIONSONDULATION, ANIMATIONSMETRONOME, ANIMATIONSHIGHJUMP, UNKNOWN, TRIANGLE, SQUARE, RETURN, FOLLOW, SAYRIGHT, SAYLEFT, WHATSMYNAME, MYNAMEIS
     }
 
     public void doSomething(ACTIONS action) {
@@ -608,6 +613,16 @@ public class JSDrone {
                     doMove((byte) 120, 1000 );
                     doMove((byte) 120, 1000 );
                     doMove((byte) 120, 1000 );
+                    break;
+                case MYNAMEIS:
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_TAP);
+                    break;
+                case WHATSMYNAME:
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_TAP);
                     break;
                 case SAYRIGHT:
                     doTurn((byte) 10, 1000);

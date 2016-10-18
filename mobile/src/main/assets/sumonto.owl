@@ -261,13 +261,37 @@
 
     <!-- http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#return -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#return">
+                    <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#return">
+                        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
+                        <command xml:lang="fr">reviens;revenez
+                        </command>
+                        <command xml:lang="en">return</command>
+                        <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
+                    </owl:Class>
+
+
+    <!-- http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#whatsmyname -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#whatsmyname">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="fr">reviens;revenez
+        <command xml:lang="fr">c'est quoi mon prénom;comment je m'appelle;tu connais mon prénom
         </command>
-        <command xml:lang="en">return</command>
+        <command xml:lang="en">What is my name;you know my name;do you know my name</command>
         <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
     </owl:Class>
+
+
+    <!-- http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#mynameis -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#mynameis">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
+        <command xml:lang="fr">mon prénom est;je m'appelle
+        </command>
+        <command xml:lang="en">my name is
+        </command>
+        <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
+    </owl:Class>
+
 
     <!-- http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#combo -->
 

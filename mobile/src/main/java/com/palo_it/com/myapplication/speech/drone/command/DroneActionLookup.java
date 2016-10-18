@@ -97,7 +97,9 @@ public class DroneActionLookup implements VoiceActionCommand {
             String toSay = "L'action du robot est: " + actions.get(0);
             Log.d(TAG, toSay);
             success = true;
-            executor.doAction(actions.get(0));
+            String message = "";
+            message = actions.get(0).equalsIgnoreCase("SAYRIGHT")||actions.get(0).equalsIgnoreCase("SAYLEFT")?"Bonjour à tous":actions.get(0);
+            executor.doAction(actions.get(0), message);
         }
         return success;
     }

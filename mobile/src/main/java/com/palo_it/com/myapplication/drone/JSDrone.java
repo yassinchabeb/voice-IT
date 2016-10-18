@@ -15,6 +15,7 @@ import java.util.List;
 
 public class JSDrone {
     private static final String TAG = "JSDrone";
+    private int i = 0;
 
     private static final int DEVICE_PORT = 21;
     private JSDroneStatusListener asyncListener;
@@ -580,23 +581,45 @@ public class JSDrone {
     public enum ACTIONS {
         FORWARD, BACKWARD, LEFT, RIGHT, STOP, ANIMATIONSLONGJUMP, ANIMATIONSTAP, ANIMATIONSSPIRAL,
         ANIMATIONSSPINTOPOSTURE, ANIMATIONSSPINJUMP, ANIMATIONSSPIN, ANIMATIONSSLOWSHAKE, ANIMATIONSSLALOM,
-        ANIMATIONSONDULATION, ANIMATIONSMETRONOME, ANIMATIONSHIGHJUMP, UNKNOWN, TRIANGLE, SQUARE, DANSE
+        ANIMATIONSONDULATION, ANIMATIONSMETRONOME, ANIMATIONSHIGHJUMP, UNKNOWN, TRIANGLE, SQUARE, RETURN, FOLLOW, SAYRIGHT, SAYLEFT
     }
 
     public void doSomething(ACTIONS action) {
         if (action != null) {
             switch (action) {
                 case LEFT:
-                    doTurn((byte) -20, 1000);
+                    doTurn((byte) -10, 1000);
                     break;
                 case RIGHT:
-                    doTurn((byte) 20, 1000);
+                    doTurn((byte) 10, 1000);
                     break;
                 case FORWARD:
                     doMove((byte) 50, 1000);
                     break;
                 case BACKWARD:
                     doMove((byte) -50, 1000);
+                    break;
+                case RETURN:
+                    doMove((byte) -120, 1000);
+                    doMove((byte) -120, 1000);
+                    doMove((byte) -120, 1000);
+                    break;
+                case FOLLOW:
+                    doMove((byte) 120, 1000 );
+                    doMove((byte) 120, 1000 );
+                    doMove((byte) 120, 1000 );
+                    break;
+                case SAYRIGHT:
+                    doTurn((byte) 10, 1000);
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_TAP);
+                    break;
+                case SAYLEFT:
+                    doTurn((byte) -10, 1000);
+                    mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation
+                            (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
+                                    .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_TAP);
                     break;
                 case STOP:
                     mDeviceController.getFeatureCommon().sendAnimationsStopAllAnimations();
@@ -671,13 +694,13 @@ public class JSDrone {
     }
 
     private void drawSquare() {
-        doMove((byte) 50, 1000);
-        doTurn((byte) 15, 1000);
-        doMove((byte) 50, 1000);
-        doTurn((byte) 15, 1000);
-        doMove((byte) 50, 1000);
-        doTurn((byte) 15, 1000);
-        doMove((byte) 50, 1000);
+        doMove((byte) 50, 888);
+        doTurn((byte) 15, 888);
+        doMove((byte) 50, 888);
+        doTurn((byte) 15, 888);
+        doMove((byte) 50, 888);
+        doTurn((byte) 15, 888);
+        doMove((byte) 50, 888);
     }
 
     private void drawTriangle() {

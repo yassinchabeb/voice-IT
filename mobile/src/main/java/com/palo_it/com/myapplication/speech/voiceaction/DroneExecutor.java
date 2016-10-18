@@ -48,7 +48,7 @@ public class DroneExecutor extends VoiceActionExecutor implements DroneReadyList
 
     public void doAction(String action) {
         speak(action);
-        Toast.makeText(activity, action, Toast.LENGTH_LONG).show();
+        Toast.makeText(activity, (action.equalsIgnoreCase("sayright")||action.equalsIgnoreCase("sayleft")?"Bonjour à tous":action) , Toast.LENGTH_LONG).show();
         JSDrone.ACTIONS actionEnum = getOrNull(JSDrone.ACTIONS.class, action.toUpperCase());
         if (actionEnum != null) {
             if (actionEnum.equals(JSDrone.ACTIONS.STOP)) {

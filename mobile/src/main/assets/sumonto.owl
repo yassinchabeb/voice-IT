@@ -173,6 +173,7 @@
         <command xml:lang="fr">
             rotation;tourne;tourne-toi;tournez;tournez-vous;animation rotation;tourner;tourner vous
         </command>
+        <message xml:lang="fr">Wahooooooouuuuuuu!!!</message>
         <command xml:lang="en">spin;spin animation;rotation;turn;tun over</command>
     </owl:Class>
 
@@ -191,6 +192,7 @@
         <command xml:lang="en">spin then jump;spin then jump animation;rotation then jumping;turn then jump;tun over
             then jump;spin and jump;spin and jump animation;rotation and jumping;turn and jump;tun over and jump
         </command>
+        <message xml:lang="fr">La folie!</message>
     </owl:Class>
 
 
@@ -254,6 +256,7 @@
         <command xml:lang="fr">recule;reculez;va en arrière;marche en arrière;recule un peu;reculez un peu;va en arrière
             un peu;allez en arrière;allez en arrière un peu;reculer;marcher en arrière;reculer un peu
         </command>
+        <message xml:lang="fr">Je recule</message>
         <command xml:lang="en">move back;go behind;walk behind;moves back a little;go behind a little</command>
         <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
     </owl:Class>
@@ -261,13 +264,13 @@
 
     <!-- http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#return -->
 
-                    <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#return">
-                        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-                        <command xml:lang="fr">reviens;revenez
-                        </command>
-                        <command xml:lang="en">return</command>
-                        <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
-                    </owl:Class>
+    <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#return">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
+        <command xml:lang="fr">reviens;revenez
+        </command>
+        <command xml:lang="en">return</command>
+        <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
+    </owl:Class>
 
 
 
@@ -530,17 +533,18 @@
 
     <!-- http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#forward -->
 
-                    <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#forward">
-                        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-                        <command xml:lang="fr">avance;avancez;avance un peu;avancez un peu;bouge;bougez;bouge un peu;bougez un
-                            peu;marche;marchez;marche un peu;marchez un peu;roule;roulez;roule un peu;roulez un peu;avancer;avancer un
-                            peu;bouger;bouger un peu;rouler;rouler un peu;viens;venez
-                        </command>
-                        <command xml:lang="en">advance;advances a little;move;moves a little;walk;go;walk a little;go a little;roll;roll
-                            a little
-                        </command>
-                        <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
-                    </owl:Class>
+    <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#forward">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
+        <command xml:lang="fr">avance;avancez;avance un peu;avancez un peu;bouge;bougez;bouge un peu;bougez un
+            peu;marche;marchez;marche un peu;marchez un peu;roule;roulez;roule un peu;roulez un peu;avancer;avancer un
+            peu;bouger;bouger un peu;rouler;rouler un peu;viens;venez
+        </command>
+        <command xml:lang="en">advance;advances a little;move;moves a little;walk;go;walk a little;go a little;roll;roll
+            a little
+        </command>
+        <message xml:lang="fr">J'avance</message>
+        <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
+    </owl:Class>
 
 
 <!-- http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#sayhello -->
@@ -565,6 +569,7 @@
         <command xml:lang="en">follow;follow me
             a little
         </command>
+        <message xml:lang="fr">Je vous suis</message>
         <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
     </owl:Class>
 
@@ -589,6 +594,7 @@
         <command xml:lang="fr">tourne à gauche;tournez à gauche;pivote à gauche;pivotez à gauche;oriente-toi à
             gauche;orientez-vous à gauche;tourner à gauche;pivoter à gauche;orienter vous à gauche;regarde à gauche;regardez à gauche;regarder à gauche;regardes à gauche
         </command>
+        <message xml:lang="fr">Je tourne à gauche</message>
         <command xml:lang="en">turn left;swivel on the left;direct you on the left</command>
         <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
     </owl:Class>
@@ -635,6 +641,7 @@
         <command xml:lang="fr">tourne à droite;tournez à droite;pivote à droite;pivotez à droite;oriente-toi à
             droite;orientez-vous à droite;tourner à droite;pivoter à droite;orienter vous à droite;regarde à droite;regardez à droite;regarder à droite;regardes à droite
         </command>
+        <message xml:lang="fr">Je tourne à droite</message>
         <command xml:lang="en">turn right;swivel on the right;direct you on the right</command>
         <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
     </owl:Class>

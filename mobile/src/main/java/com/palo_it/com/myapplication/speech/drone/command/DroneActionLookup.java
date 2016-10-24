@@ -76,11 +76,11 @@ public class DroneActionLookup implements VoiceActionCommand {
         List<String> separators = new ArrayList<>();
         // Get list of separators from the ontology
         //separators = getSeparatorsFromOntology();
-        separators.add("et");
-        separators.add("puis");
-        separators.add("ensuite");
-        separators.add("enfin");
-        separators.add("avant");
+//        separators.add("et");
+//        separators.add("puis");
+//        separators.add("ensuite");
+//        separators.add("enfin");
+//        separators.add("avant");
         // Use the separator in order to split the heard sentence and get the list of orders
 
         List<String> separatedWords = Arrays.asList(heard.getWords());

@@ -111,7 +111,7 @@ public class OntologySearcher {
                 int index = element.getAttribute("rdf:about").indexOf("#");
                 apiOperationTmp = element.getAttribute("rdf:about").substring(index + 1);
             }
-            if (message.getAttribute("xml:lang").equalsIgnoreCase("fr")) {
+            if (message != null && message.getAttribute("xml:lang").equalsIgnoreCase("fr")) {
                 response = message.getTextContent();
             }
         }

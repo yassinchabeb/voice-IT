@@ -16,6 +16,7 @@ import root.gast.speech.text.WordList;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DroneActionLookup implements VoiceActionCommand {
@@ -25,6 +26,7 @@ public class DroneActionLookup implements VoiceActionCommand {
     private DroneExecutor executor;
     private SoundsLikeWordMatcher ontologyMatcher;
     private Activity activity;
+    private String name = "";
 
     public DroneActionLookup(Activity activity, DroneExecutor executor, OntologySearcher ontology) {
         this.activity = activity;
@@ -70,7 +72,7 @@ public class DroneActionLookup implements VoiceActionCommand {
         //String noStopWords = removeStopWords(heardWord);
 
 
-        List<String> separators = new ArrayList<String>();
+        List<String> separators = new ArrayList<>();
         // Get list of separators from the ontology
         //separators = getSeparatorsFromOntology();
         separators.add("et");
@@ -80,6 +82,11 @@ public class DroneActionLookup implements VoiceActionCommand {
         separators.add("avant");
         // Use the separator in order to split the heard sentence and get the list of orders
 
+        List<String> separatedWords = Arrays.asList(heard.getWords());
+        if (heardWord.startsWith("je m'appelle")) {
+            this.name = heard.getStringAfter(separatedWords.indexOf("m'appelle"));
+            heardWord = heardWord.toLowerCase().replace(name.trim().toLowerCase(), "").trim();
+        }
         List<String> orders = getOrders(separators, heardWord);
         for (String order : orders) {
             System.out.println("order:" + order);
@@ -97,9 +104,7 @@ public class DroneActionLookup implements VoiceActionCommand {
             String toSay = "L'action du robot est: " + actions.get(0);
             Log.d(TAG, toSay);
             success = true;
-            String message = "";
-            message = actions.get(0).equalsIgnoreCase("SAYRIGHT")||actions.get(0).equalsIgnoreCase("SAYLEFT")?"Bonjour à tous":actions.get(0);
-            executor.doAction(actions.get(0), message);
+            executor.doAction(actions.get(0), name);
         }
         return success;
     }

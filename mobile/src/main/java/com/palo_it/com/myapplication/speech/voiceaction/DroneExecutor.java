@@ -25,7 +25,6 @@ public class DroneExecutor extends VoiceActionExecutor implements DroneReadyList
     private ProgressDialog progressDialog;
     private JSDrone drone;
     private TextToSpeech tts;
-    String name = "NULL";
 
     public DroneExecutor(SpeechRecognizingActivity speech) {
         super(speech);
@@ -53,31 +52,32 @@ public class DroneExecutor extends VoiceActionExecutor implements DroneReadyList
     }
 
 
+    public void doAction(String action, String name) {
 
-
-    public void doAction(String action, String message) {
-
-
+        /*
+        * TODO: Create a new VoiceAction for this
+        * =================================================================
+         */
         if (action != null) {
-            switch (action.toUpperCase()) {
-                case "MYNAMEIS":
-                    name = "monsieur";
-                    action = "Enchanté monsieur";
-                    message = "";
-                    //break;
-                case "WHATSMYNAME":
-                    if (name.equals("NULL"))
-                    action = "Je ne sais pas";
-                    else
-                    action = "Vous vous zappelez " + name;
-                    message = "";
-                    //break;
+            JSDrone.ACTIONS actionEnum = Enum.valueOf(JSDrone.ACTIONS.class, action.toUpperCase());
+            switch (actionEnum) {
+                case SAYHELLO:
+                    action = "Bonjour a tous";
+                    break;
+                case MYNAMEIS:
+                    action = "Enchanté " + name;
+                    break;
+                case WHATSMYNAME:
+                    action = name.isEmpty() ? "Je ne sais pas" : "Vous vous zappelez " + name;
+                    break;
             }
         }
-
+        /*
+        * =================================================================
+         */
 
         speak(action);
-        Toast.makeText(activity, action + message , Toast.LENGTH_LONG).show();
+        Toast.makeText(activity, action, Toast.LENGTH_LONG).show();
         JSDrone.ACTIONS actionEnum = getOrNull(JSDrone.ACTIONS.class, action.toUpperCase());
         if (actionEnum != null) {
             if (actionEnum.equals(JSDrone.ACTIONS.STOP)) {

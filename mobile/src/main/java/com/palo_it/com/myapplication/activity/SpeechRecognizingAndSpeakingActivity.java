@@ -16,6 +16,8 @@ import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 
+import com.palo_it.com.myapplication.speech.activation.WordActivator;
+
 import java.util.Locale;
 
 import root.gast.speech.SpeechRecognitionUtil;
@@ -38,7 +40,7 @@ public abstract class SpeechRecognizingAndSpeakingActivity extends SpeechRecogni
 
     private void init() {
         this.deactivateUi();
-        this.ttsInit = new TextToSpeechInitializer(this, Locale.getDefault(), this);
+        this.ttsInit = new TextToSpeechInitializer(this, Locale.forLanguageTag(WordActivator.LANGUAGE), this);
     }
 
     public void onSuccessfulInit(TextToSpeech tts) {

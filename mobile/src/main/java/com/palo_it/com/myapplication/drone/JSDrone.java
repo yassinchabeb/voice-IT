@@ -604,7 +604,7 @@ public class JSDrone {
     public enum ACTIONS {
         FORWARD, BACKWARD, LEFT, RIGHT, STOP, ANIMATIONSLONGJUMP, ANIMATIONSTAP, ANIMATIONSSPIRAL,
         ANIMATIONSSPINTOPOSTURE, ANIMATIONSSPINJUMP, ANIMATIONSSPIN, ANIMATIONSSLOWSHAKE, ANIMATIONSSLALOM,
-        ANIMATIONSONDULATION, ANIMATIONSMETRONOME, ANIMATIONSHIGHJUMP, UNKNOWN, TRIANGLE, SQUARE, RETURN, FOLLOW, SAYRIGHT, SAYLEFT, WHATSMYNAME, MYNAMEIS
+        ANIMATIONSONDULATION, ANIMATIONSMETRONOME, ANIMATIONSHIGHJUMP, UNKNOWN, TRIANGLE, SQUARE, RETURN, FOLLOW, SAYHELLO, WHATSMYNAME, MYNAMEIS
     }
 
     public void doSomething(ACTIONS action) {
@@ -642,13 +642,11 @@ public class JSDrone {
                             (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
                                     .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_TAP);
                     break;
-                case SAYRIGHT:
+                case SAYHELLO:
                     doTurn((byte) 10, 1000);
                     mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation
                             (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM
                                     .ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_TAP);
-                    break;
-                case SAYLEFT:
                     doTurn((byte) -10, 1000);
                     mDeviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation
                             (ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM

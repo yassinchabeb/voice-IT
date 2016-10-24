@@ -540,24 +540,13 @@
                     </owl:Class>
 
 
-    <!-- http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#sayright -->
+<!-- http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#sayhello -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#sayright">
+    <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#sayhello">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="fr">dis bonjour;dites bonjour;dit bonjour
+        <command xml:lang="fr">dis salut;dites salut;dit salut;dis coucou;dites coucou;dit coucou;dis bonjour;dites bonjour;dit bonjour
         </command>
-        <command xml:lang="en">say good morning;say hi
-        </command>
-        <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
-    </owl:Class>
-
-<!-- http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#sayleft -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#sayleft">
-        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="fr">dis salut;dites salut;dit salut;dis coucou;dites coucou;dit coucou
-        </command>
-        <command xml:lang="en">say hello
+        <command xml:lang="en">say hello;say good morning;say hi
         </command>
         <speed rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0-127</speed>
     </owl:Class>

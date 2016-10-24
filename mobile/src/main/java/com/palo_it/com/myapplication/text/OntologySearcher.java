@@ -1,5 +1,6 @@
 package com.palo_it.com.myapplication.text;
 
+import android.util.Pair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -55,9 +56,8 @@ public class OntologySearcher {
         return document.getDocumentElement();
     }
 
-    public String getApi(String textFromSpeech) {
-        String apiOperation = UNKNOWN;
-
+    public Pair<String, String> getApi(String textFromSpeech) {
+        Pair<String, String> apiOperation = null;
         if (racine != null) {
             final NodeList racineNoeuds = racine.getChildNodes();
             final int nbRacineNoeuds = racineNoeuds.getLength();
@@ -68,51 +68,54 @@ public class OntologySearcher {
                     if (element != null) {
                         if (element.getNodeName() != null && element.getNodeName().equals("owl:Class")) {
 
-//                            System.out.println("getNodeName : " + element.getNodeName());
+                            //                            System.out.println("getNodeName : " + element.getNodeName());
 
                             if (element.getAttribute("rdf:about") != null) {
-//                                System.out.println("rdf:about : " + element.getAttribute("rdf:about"));
+                                //                                System.out.println("rdf:about : " + element.getAttribute("rdf:about"));
                             }
                             final Element subClassOf =
                                     (Element) element.getElementsByTagName("rdfs:subClassOf").item(0);
                             final Element command = (Element) element.getElementsByTagName("command").item(0);
                             final Element posture = (Element) element.getElementsByTagName("posture").item(0);
+                            final Element message = (Element) element.getElementsByTagName("message").item(0);
 
                             if (subClassOf != null && subClassOf.getAttribute("rdf:resource") != null) {
-//                                System.out.println("rdf:resource : " + subClassOf.getAttribute("rdf:resource"));
+                                //                                System.out.println("rdf:resource : " + subClassOf.getAttribute("rdf:resource"));
                             }
 
                             if (command != null) {
-                                apiOperation = match(textFromSpeech, element, command, apiOperation);
+                                apiOperation = match(textFromSpeech, element, command, message);
+                                if (!apiOperation.first.isEmpty()) {
+                                    break;
+                                }
                             }
 
                             if (posture != null) {
-//                                System.out.println("posture : " + posture.getTextContent());
+                                //                                System.out.println("posture : " + posture.getTextContent());
                             }
                         }
                     }
                 }
             }
         }
-        System.out.println("apiOperation : " + apiOperation);
+        System.out.println("apiOperation : " + apiOperation.first);
         return apiOperation;
     }
 
-    public String match(String textFromSpeech, Element element, Element command, String apiOperation) {
-        String apiOperationTmp = apiOperation;
+    public Pair<String, String> match(String textFromSpeech, Element element, Element command, Element message) {
+        String apiOperationTmp = "";
+        String response = "";
 
-//        System.out.println("command : " + command.getTextContent());
-        // String textFromSpeech = "arrête";
         if (command.getTextContent().contains(textFromSpeech)) {
-//            System.out.println("call API : #########");
             if (element.getAttribute("rdf:about") != null) {
                 int index = element.getAttribute("rdf:about").indexOf("#");
                 apiOperationTmp = element.getAttribute("rdf:about").substring(index + 1);
-//                System.out.println("rdf:about : " + apiOperationTmp);
             }
-//            System.out.println("####################");
+            if (message.getAttribute("xml:lang").equalsIgnoreCase("fr")) {
+                response = message.getTextContent();
+            }
         }
-        return apiOperationTmp;
+        return Pair.create(apiOperationTmp, response);
     }
 
     public List<String> getCommands() {

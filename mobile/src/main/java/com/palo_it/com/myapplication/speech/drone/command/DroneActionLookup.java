@@ -3,6 +3,7 @@ package com.palo_it.com.myapplication.speech.drone.command;
 import android.app.Activity;
 import android.util.Log;
 
+import android.util.Pair;
 import com.palo_it.com.myapplication.speech.text.match.SoundsLikeWordMatcher;
 import com.palo_it.com.myapplication.speech.voiceaction.DroneExecutor;
 import com.palo_it.com.myapplication.speech.voiceaction.VoiceActionCommand;
@@ -67,7 +68,7 @@ public class DroneActionLookup implements VoiceActionCommand {
         boolean success = false;
 //        String[] heardWords = heard.getWords();
         String heardWord = heard.getSource();
-        List<String> actions = new ArrayList<>();
+        List<Pair<String, String>> actions = new ArrayList<>();
 //        for (String word : heardWords) {
         //String noStopWords = removeStopWords(heardWord);
 
@@ -91,7 +92,7 @@ public class DroneActionLookup implements VoiceActionCommand {
         for (String order : orders) {
             System.out.println("order:" + order);
             if (ontologyMatcher.isIn(order)) {
-                String apiAction = ontology.getApi(order);
+                Pair<String, String> apiAction = ontology.getApi(order);
                 Log.d(TAG, String.format("Found action: %s , thanks to %s", apiAction, full ? "FULL" : "PARTIAL"));
                 actions.add(apiAction);
             }

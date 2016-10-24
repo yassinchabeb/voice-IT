@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Toast;
 
 import com.palo_it.com.myapplication.R;
@@ -52,34 +53,32 @@ public class DroneExecutor extends VoiceActionExecutor implements DroneReadyList
     }
 
 
-    public void doAction(String action, String name) {
+    public void doAction(Pair<String, String> action, String name) {
 
         /*
         * TODO: Create a new VoiceAction for this
         * =================================================================
          */
-        if (action != null) {
-            JSDrone.ACTIONS actionEnum = Enum.valueOf(JSDrone.ACTIONS.class, action.toUpperCase());
+        String apiAction = action.first;
+        String outputMessage = action.second;
+        if (action.first != null) {
+            JSDrone.ACTIONS actionEnum = Enum.valueOf(JSDrone.ACTIONS.class, apiAction.toUpperCase());
             switch (actionEnum) {
-                case SAYHELLO:
-                    action = "Bonjour a tous";
-                    break;
                 case MYNAMEIS:
-                    action = "Enchanté " + name;
+                    outputMessage = outputMessage.concat(" ").concat(name);
                     break;
                 case WHATSMYNAME:
-                    action = name.isEmpty() ? "Je ne sais pas" : "Vous vous zappelez " + name;
+                    outputMessage = name.isEmpty() ? "Je ne sais pas" : outputMessage.concat(" ").concat(name);
                     break;
             }
-        }
         /*
         * =================================================================
          */
 
-        speak(action);
-        Toast.makeText(activity, action, Toast.LENGTH_LONG).show();
-        JSDrone.ACTIONS actionEnum = getOrNull(JSDrone.ACTIONS.class, action.toUpperCase());
-        if (actionEnum != null) {
+            if (!outputMessage.isEmpty()) {
+                speak(outputMessage);
+            }
+            Toast.makeText(activity, apiAction, Toast.LENGTH_LONG).show();
             if (actionEnum.equals(JSDrone.ACTIONS.STOP)) {
                 activity.finish();
             } else {

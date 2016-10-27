@@ -171,7 +171,7 @@
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#animationsSpin">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
         <command xml:lang="fr">
-            rotation;tourne;tourne-toi;tournez;tournez-vous;animation rotation;tourner;tourner vous
+            rotation;tourne;tourne-toi;tournez;tournez-vous;animation rotation;tourner;tourner vous;tournez vous
         </command>
         <message xml:lang="fr">Wahooooooouuuuuuu!!!</message>
         <command xml:lang="en">spin;spin animation;rotation;turn;tun over</command>
@@ -537,7 +537,7 @@
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
         <command xml:lang="fr">avance;avancez;avance un peu;avancez un peu;bouge;bougez;bouge un peu;bougez un
             peu;marche;marchez;marche un peu;marchez un peu;roule;roulez;roule un peu;roulez un peu;avancer;avancer un
-            peu;bouger;bouger un peu;rouler;rouler un peu;viens;venez
+            peu;bouger;bouger un peu;rouler;rouler un peu;viens;venez;viens ici;venez ici
         </command>
         <command xml:lang="en">advance;advances a little;move;moves a little;walk;go;walk a little;go a little;roll;roll
             a little
@@ -656,14 +656,16 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#triangle">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="fr">dessine un triangle;dessines un triangle;dessiner un triangle;fais un triangle;trace un triangle;tracez un triangle;tracer un triangle;triangle</command>
+        <command xml:lang="fr">dessine un triangle;dessines un triangle;dessiner un triangle;dessine moi un triangle;dessines moi un triangle;dessiner moi un triangle;fais un triangle;trace un triangle;tracez un triangle;tracer un triangle;triangle</command>
         <command xml:lang="en">draw a triangle;make a triangle;triangle</command>
+        <message>Je dessine un triangle</message>
     </owl:Class>
 
     <owl:Class rdf:about="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#square">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#api"/>
-        <command xml:lang="fr">dessine un carré;dessines un carré;dessinez un carré;dessiner un carré;fais un carré;trace un carré;tracez un carré;tracer un carré;carré</command>
+        <command xml:lang="fr">dessine un carré;dessines un carré;dessinez un carré;dessiner un carré;dessine moi un carré;dessinez moi un carré;fais un carré;trace un carré;tracez un carré;tracer un carré;carré</command>
         <command xml:lang="en">draw a square;make a square;square</command>
+        <message>Je dessine un carré</message>
     </owl:Class>
 
     <!-- http://www.semanticweb.org/ychabeb/ontologies/2016/7/untitled-ontology-10#stop -->

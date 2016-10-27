@@ -5,6 +5,6 @@
     <!--<string name="preparing_recognizer">"Preparing the recognizer"</string>-->
     <string name="stop_recognizing">arrête</string>
     <string name="welcome">Bienvenue! Pour commencer dites \"Bonjour mon ami\"</string>
-    <string name="ready">Dites-moi quoi faire!</string>
+    <string name="ready">Dis moi quoi faire!</string>
 </resources>
 
